@@ -1,12 +1,7 @@
-import {gql, concatenateTypeDefs} from "apollo-server-express";
+import {concatenateTypeDefs} from "apollo-server-express";
 
-import User from "./user";
+import Query from "./Query";
+import Mutation from "./Mutation";
 import result from "./types/result";
 
-const test = gql`
-  type Query {
-    hello: String
-  }
-`;
-
-export default concatenateTypeDefs([test, result, User]);
+export default concatenateTypeDefs([result, Query, Mutation]);

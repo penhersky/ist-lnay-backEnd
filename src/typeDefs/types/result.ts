@@ -5,4 +5,9 @@ export default gql`
     message: String
     error: String
   }
+  type LoginResult {
+    message: String
+    error: String
+    token: String
+  }
 `;

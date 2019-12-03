@@ -1,13 +1,11 @@
-import register from "./user";
+import user from "./user";
 
 export default {
   Query: {
-    hello: (_: void, args: void) => {
-      return "hello new project!";
-    }
+    login: user.login
   },
 
   Mutation: {
-    ...register
+    ...user.register
   }
 };

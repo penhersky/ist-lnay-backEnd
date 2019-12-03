@@ -37,3 +37,22 @@ export const finishRegisterValidation = async (data: {
   if (result.error) return result.error.details[0].message;
   return undefined;
 };
+
+export const loginValidation = async (data: {
+  email: String;
+  password: string;
+}): Promise<string | undefined> => {
+  const schema = Joi.object({
+    email: Joi.string()
+      .email()
+      .min(6)
+      .max(128),
+    password: Joi.string()
+      .min(8)
+      .max(24)
+      .required()
+  });
+  const result = schema.validate(data);
+  if (result.error) return result.error.details[0].message;
+  return undefined;
+};
