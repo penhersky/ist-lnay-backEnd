@@ -9,5 +9,6 @@ export default gql`
       platform: String
     ): result
     finishRegister(id: Int!, password: String!): result
+    forgotPasswordFinish(id: Int, newPassword: String!): result
   }
 `;

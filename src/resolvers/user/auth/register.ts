@@ -1,8 +1,5 @@
 import bcryptjs from "bcryptjs";
-import {
-  finishRegisterValidation,
-  startRegisterValidation
-} from "./_validationAuth";
+import {passwordValidation, startRegisterValidation} from "./_validationAuth";
 //import Email from "./email";
 import {User} from "../../../database/models";
 import {isDevelopment} from "../../../config";
@@ -49,7 +46,7 @@ export default {
 
   finishRegister: async (_: any, {id, password}: any) => {
     try {
-      const validationError = await finishRegisterValidation({
+      const validationError = await passwordValidation({
         password
       });
       if (validationError) return {error: validationError};
