@@ -5,7 +5,7 @@ export class User extends Sequelize.Model {
   public id!: number;
   public name!: string;
   public surname!: string;
-  public admin!: boolean;
+  public position!: string;
   public email!: string;
   public password!: string;
   public confirmed!: boolean;
@@ -33,8 +33,8 @@ const UserModel = <UserType>sequelize.define(
       type: new Sequelize.DataTypes.STRING(28),
       allowNull: false
     },
-    admin: {
-      type: Sequelize.DataTypes.BOOLEAN,
+    position: {
+      type: Sequelize.DataTypes.STRING(11),
       defaultValue: false,
       allowNull: false
     },

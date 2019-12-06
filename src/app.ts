@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import {ApolloServer} from "apollo-server-express";
+import {ApolloServer, makeExecutableSchema} from "apollo-server-express";
 import cors from "cors";
 
 import typeDefs from "./typeDefs";
@@ -12,9 +12,14 @@ app.use("*", cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-const server = new ApolloServer({
+const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
+  resolverValidationOptions: {requireResolversForResolveType: false}
+});
+
+const server = new ApolloServer({
+  schema,
   context: ({req, res}) => ({req, res})
 });
 

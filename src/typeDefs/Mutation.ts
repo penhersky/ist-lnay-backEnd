@@ -10,5 +10,9 @@ export default gql`
     ): result
     finishRegister(id: Int!, password: String!): result
     forgotPasswordFinish(id: Int, newPassword: String!): result
+
+    User: userMutation
+    Group: mutationGroup
+    Cathedra: mutationCathedra
   }
 `;
