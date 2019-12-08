@@ -7,6 +7,8 @@ export const typeUser = gql`
     surname: String!
     position: String!
     email: String!
+    createdAt: String!
+    updatedAt: String!
     additionalInformation: additionalInformationUser
   }
 

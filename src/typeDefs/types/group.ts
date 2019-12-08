@@ -7,7 +7,7 @@ export const typeGroup = gql`
     cathedra: cathedra!
     information: String
     fails: [String]
-    people: [String!]
+    people: [user!]
     createAt: String!
   }
 

@@ -1,13 +1,12 @@
-import user from "./user";
+import user, {UserTypes, UserQuery, userMutation} from "./user";
 
 export default {
   Query: {
-    login: user.login,
-    forgotPasswordStart: user.forgotPassword.forgotPasswordStart
+    ...UserQuery
   },
 
   Mutation: {
-    ...user.register,
-    forgotPasswordFinish: user.forgotPassword.forgotPasswordFinish
-  }
+    ...userMutation
+  },
+  ...UserTypes
 };

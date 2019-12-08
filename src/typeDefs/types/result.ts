@@ -4,6 +4,7 @@ export default gql`
   type result {
     message: String
     error: String
+    redirect: Boolean
   }
   type LoginResult {
     message: String

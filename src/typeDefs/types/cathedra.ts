@@ -7,7 +7,6 @@ export const typeCathedra = gql`
     faculty: String!
     information: String
     fails: [String]
-    groups: [group!]
     createAt: String!
   }
 
