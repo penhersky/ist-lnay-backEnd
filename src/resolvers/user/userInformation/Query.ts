@@ -1,4 +1,4 @@
-import {User} from "../.../../../../database/models";
+import {User, UserInformation} from "../.../../../../database/models";
 
 export default {
   getUser: async (_: any, args: any, context: any) => {
@@ -16,7 +16,7 @@ export default {
         updatedAt: user.updatedAt
       };
     } catch (error) {
-      return {error: "Server Error!"};
+      return {error: "Server Error! Kod(011)"};
     }
   },
   getUsers: async (_: any, args: any, context: any) => {
@@ -33,7 +33,33 @@ export default {
         updatedAt: user.updatedAt
       }));
     } catch (error) {
-      return {error: "Server Error!"};
+      return {error: "Server Error! Kod(012)"};
+    }
+  },
+  getUsersByGroupID: async (_: any, {id}: any, context: any) => {
+    try {
+      const UsersInformation = await UserInformation.findAll({
+        where: {group: id}
+      });
+      return await UsersInformation.map(
+        async (userInformation: any) =>
+          await User.findOne({where: {id: userInformation.owner}})
+      );
+    } catch (error) {
+      return {error: "Server Error! Kod(013)"};
+    }
+  },
+  getUsersByCathedraID: async (_: any, {id}: any, context: any) => {
+    try {
+      const UsersInformation = await UserInformation.findAll({
+        where: {cathedra: id}
+      });
+      return await UsersInformation.map(
+        async (userInformation: any) =>
+          await User.findOne({where: {id: userInformation.owner}})
+      );
+    } catch (error) {
+      return {error: "Server Error! Kod(014)"};
     }
   }
 };

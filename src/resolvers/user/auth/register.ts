@@ -1,7 +1,7 @@
 import bcryptjs from "bcryptjs";
 import {passwordValidation, startRegisterValidation} from "./_validationAuth";
 //import Email from "./email";
-import {User} from "../../../database/models";
+import {User, UserInformation} from "../../../database/models";
 import {isDevelopment} from "../../../config";
 
 export default {
@@ -62,6 +62,7 @@ export default {
         confirmed: true,
         password: hashPassword
       });
+      await UserInformation.create({});
       return {message: "Registration was successful!"};
     } catch (error) {
       if (isDevelopment) console.log(error);

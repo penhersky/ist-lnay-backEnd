@@ -7,7 +7,7 @@ export const additionalInformationUser = {
         console.log(parent);
         return await Group.findOne({where: {id: parent.group}});
       } catch (error) {
-        return {error: "Server Error!"};
+        return {error: "Server Error! Kod(101)"};
       }
     }
   },
@@ -15,7 +15,7 @@ export const additionalInformationUser = {
     try {
       return await Cathedra.findOne({where: {id: parent.group}});
     } catch (error) {
-      return {error: "Server Error!"};
+      return {error: "Server Error! Kod(102)"};
     }
   }
 };
@@ -25,7 +25,7 @@ export const user = {
     try {
       return await UserInformation.findOne({where: {owner: parent.id}});
     } catch (error) {
-      return {error: "Server Error!"};
+      return {error: "Server Error! Kod(103)"};
     }
   }
 };

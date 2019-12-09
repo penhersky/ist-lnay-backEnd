@@ -7,6 +7,7 @@ import {
   userRes
 } from "./userInformation/userType";
 import userQuery from "./userInformation/Query";
+import mutationUser from "./userInformation/Mutation";
 
 export default {
   register,
@@ -17,7 +18,8 @@ export const UserTypes = {
   user,
   additionalInformationUser,
   queryUser: userQuery,
-  userRes
+  userRes,
+  userMutation: mutationUser
 };
 
 export const UserQuery = {
@@ -28,5 +30,6 @@ export const UserQuery = {
 
 export const userMutation = {
   ...register,
-  forgotPasswordFinish: forgotPassword.forgotPasswordFinish
+  forgotPasswordFinish: forgotPassword.forgotPasswordFinish,
+  User: mutationUser.changePassword
 };

@@ -4,7 +4,7 @@ export default gql`
   type queryUser {
     getUser(id: ID!): userRes
     getUsers: [user]
-    getUserByGroupID(id: ID!): [user]
-    getUserByCathedraID(id: ID!): [user]
+    getUsersByGroupID(id: ID!): [user]
+    getUsersByCathedraID(id: ID!): [user]
   }
 `;

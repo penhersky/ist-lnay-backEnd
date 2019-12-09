@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
 import {SECRET, isDevelopment} from "../../../../config";
 
-function verifyToken(context: any) {
+const verifyToken = (context: any): String | undefined => {
   const token: string | undefined = context.req.header("auth-token");
   if (!token) {
-    return {error: "Access Denied!"};
+    return "Access Denied!";
   }
   try {
     const verified = <any>jwt.verify(String(token), String(SECRET));
@@ -12,10 +12,11 @@ function verifyToken(context: any) {
       id: verified.id,
       email: verified.email
     };
+    return undefined;
   } catch (error) {
     if (isDevelopment) console.error(error);
-    return {error: "Invalid Token!"};
+    return "Invalid Token!";
   }
-}
+};
 
 export default verifyToken;
