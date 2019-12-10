@@ -7,13 +7,15 @@
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
     "create": "ts-node createSchema.ts",
-    "test": "",
+    "test": "ts-mocha test/*.test.ts",
     "build": "tsc -p ."
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/chai": "^4.2.6",
     "@types/hapi__joi": "^16.0.3",
     "@types/jsonwebtoken": "^8.3.5",
+    "@types/mocha": "^5.2.7",
     "@types/nodemailer": "^6.2.2",
     "@typescript-eslint/eslint-plugin": "^2.9.0",
     "@typescript-eslint/parser": "^2.9.0",
@@ -22,6 +24,7 @@
     "eslint-config-prettier": "^6.7.0",
     "mocha": "^6.2.2",
     "nodemon": "^2.0.1",
+    "ts-mocha": "^6.0.0",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.2"
   },

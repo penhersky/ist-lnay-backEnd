@@ -1,5 +1,5 @@
 import bcryptjs from "bcryptjs";
-import {passwordValidation, startRegisterValidation} from "./_validationAuth";
+import {passwordValidation, validationUserData} from "./_validationAuth";
 //import Email from "./email";
 import {User, UserInformation} from "../../../database/models";
 import {isDevelopment} from "../../../config";
@@ -7,7 +7,7 @@ import {isDevelopment} from "../../../config";
 export default {
   startRegister: async (_: any, {name, surname, email, platform}: any) => {
     try {
-      const validationError = await startRegisterValidation({
+      const validationError = await validationUserData({
         name,
         surname,
         email

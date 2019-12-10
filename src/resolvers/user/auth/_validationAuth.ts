@@ -1,6 +1,6 @@
 import Joi from "@hapi/joi";
 
-export const startRegisterValidation = async (data: {
+export const validationUserData = async (data: {
   name: string;
   surname: string;
   email: string;
