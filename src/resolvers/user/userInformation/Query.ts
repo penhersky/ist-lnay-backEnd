@@ -16,7 +16,7 @@ export default {
         updatedAt: user.updatedAt
       };
     } catch (error) {
-      return {error: "Server Error! Kod(011)"};
+      return {error: "Server Error! Kod(111)"};
     }
   },
   getUsers: async (_: any, args: any, context: any) => {
@@ -33,7 +33,7 @@ export default {
         updatedAt: user.updatedAt
       }));
     } catch (error) {
-      return {error: "Server Error! Kod(012)"};
+      return {error: "Server Error! Kod(112)"};
     }
   },
   getUsersByGroupID: async (_: any, {id}: any, context: any) => {
@@ -46,7 +46,7 @@ export default {
           await User.findOne({where: {id: userInformation.owner}})
       );
     } catch (error) {
-      return {error: "Server Error! Kod(013)"};
+      return {error: "Server Error! Kod(113)"};
     }
   },
   getUsersByCathedraID: async (_: any, {id}: any, context: any) => {
@@ -59,7 +59,7 @@ export default {
           await User.findOne({where: {id: userInformation.owner}})
       );
     } catch (error) {
-      return {error: "Server Error! Kod(014)"};
+      return {error: "Server Error! Kod(114)"};
     }
   }
 };

@@ -27,7 +27,6 @@ export const typeUser = gql`
   input userInput {
     name: String!
     surname: String!
-    position: String!
     email: String!
   }
 

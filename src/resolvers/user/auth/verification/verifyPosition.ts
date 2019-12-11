@@ -14,7 +14,5 @@ export const positionDetermination = (position: String): number => {
 };
 
 export default (position: String, minPosition: String): Boolean => {
-  if (positionDetermination(position) >= positionDetermination(minPosition))
-    return true;
-  return false;
+  return positionDetermination(position) >= positionDetermination(minPosition);
 };

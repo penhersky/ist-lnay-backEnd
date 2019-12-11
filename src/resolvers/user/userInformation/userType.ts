@@ -4,7 +4,6 @@ export const additionalInformationUser = {
   group: {
     group: async (parent: any, args: any, context: any) => {
       try {
-        console.log(parent);
         return await Group.findOne({where: {id: parent.group}});
       } catch (error) {
         return {error: "Server Error! Kod(101)"};
@@ -13,7 +12,7 @@ export const additionalInformationUser = {
   },
   cathedra: async (parent: any, args: any, context: any) => {
     try {
-      return await Cathedra.findOne({where: {id: parent.group}});
+      return await Cathedra.findOne({where: {id: parent.cathedra}});
     } catch (error) {
       return {error: "Server Error! Kod(102)"};
     }
@@ -23,7 +22,9 @@ export const additionalInformationUser = {
 export const user = {
   additionalInformation: async (parent: any, args: any, context: any) => {
     try {
-      return await UserInformation.findOne({where: {owner: parent.id}});
+      return await UserInformation.findOne({
+        where: {id: parent.additionalInformation}
+      });
     } catch (error) {
       return {error: "Server Error! Kod(103)"};
     }

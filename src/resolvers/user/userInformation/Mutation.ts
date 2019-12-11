@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 
-import {User} from "../../../database/models";
+import {User, UserInformation} from "../../../database/models";
 import userIdentity from "../auth/verification/userIdentity";
 import verifyToken from "../auth/verification/verifyToken";
 import {passwordValidation, validationUserData} from "../auth/_validationAuth";
@@ -49,7 +49,7 @@ export default {
       });
       return {message: "Password changed!"};
     } catch (error) {
-      return {error: "Server Error! Kod(021)"};
+      return {error: "Server Error! Kod(121)"};
     }
   },
   updateUser: async (_: any, {id, input}: any, context: any) => {
@@ -62,7 +62,7 @@ export default {
       });
 
       if (+actualUser.id !== +id) {
-        if (!verifyPosition(actualUser.position, "Group leader"))
+        if (!verifyPosition(actualUser.position, "admin"))
           return {error: "You do not have access to this action!"};
       }
       const changedUser = await User.findOne({where: {id}}); // ?
@@ -74,9 +74,45 @@ export default {
       });
       if (validationError) return {error: validationError};
 
+      const mailUser = await User.findOne({where: {email: input.email}});
+      if (mailUser) return {error: 'A user with this "email" already exists!'};
+
+      await changedUser.update({
+        name: input.name,
+        surname: input.surname,
+        email: input.email
+      });
+      return {
+        id: changedUser.id,
+        name: changedUser.name,
+        surname: changedUser.surname,
+        position: changedUser.position,
+        email: changedUser.email,
+        updatedAt: changedUser.updatedAt,
+        createdAt: changedUser.createdAt
+      };
+    } catch (error) {
+      return {error: "Server Error! Kod(122)"};
+    }
+  },
+  changePosition: async (_: any, {id, position}: any, context: any) => {
+    try {
+      const userAuthError = verifyToken(context);
+      if (userAuthError) return {error: userAuthError, redirect: true};
+
+      const actualUser = await User.findOne({
+        where: {id: context.res.locals.user.id}
+      });
+
+      if (+actualUser.id !== +id) {
+        if (!verifyPosition(actualUser.position, "Group leader"))
+          return {error: "You do not have access to this action!"};
+      }
+      const changedUser = await User.findOne({where: {id}});
+
       // check change rights
       if (
-        !verifyPosition(actualUser.position, input.position) ||
+        !verifyPosition(actualUser.position, position) ||
         !verifyPosition(actualUser.position, changedUser.position)
       )
         return {
@@ -84,18 +120,78 @@ export default {
             'Your status is too low to perform this operation!(change "position")'
         };
 
-      const mailUser = await User.findOne({where: {email: input.email}});
-      if (mailUser) return {error: 'A user with this "email" already exists!'};
-
       await changedUser.update({
-        name: input.name,
-        surname: input.surname,
-        position: input.position,
-        email: input.email
+        position: position
       });
       return {message: "The operation was successful!"};
     } catch (error) {
-      return {error: "Server Error! Kod(022)"};
+      return {error: "Server Error! Kod(123)"};
+    }
+  },
+  updateAdditionalInformationByUserId: async (
+    _: any,
+    {id, input}: any,
+    context: any
+  ) => {
+    try {
+      const userAuthError = verifyToken(context);
+      if (userAuthError) return {error: userAuthError, redirect: true};
+
+      const actualUser = await User.findOne({
+        where: {id: context.res.locals.user.id}
+      });
+
+      if (+actualUser.id !== +id) {
+        if (!verifyPosition(actualUser.position, "Group leader"))
+          return {error: "You do not have access to this action!"};
+      }
+      const changedUserInformation = await User.findOne({where: {id}}); // ?
+
+      await changedUserInformation.update({
+        image: input.image,
+        group: input.group,
+        cathedra: input.cathedra,
+        faculty: input.faculty,
+        phonNumber: input.phonNumber,
+        studentNumber: input.studentNumber,
+        born: input.born,
+        residence: input.residence,
+        otherInformation: input.otherInformation
+      });
+      return {
+        id: changedUserInformation.id,
+        image: changedUserInformation.image,
+        group: changedUserInformation.group,
+        cathedra: changedUserInformation.cathedra,
+        faculty: changedUserInformation.faculty,
+        phonNumber: changedUserInformation.phonNumber,
+        studentNumber: changedUserInformation.studentNumber,
+        born: changedUserInformation.born,
+        residence: changedUserInformation.residence,
+        otherInformation: changedUserInformation.otherInformation
+      };
+    } catch (error) {
+      return {error: "Server Error! Kod(124)"};
+    }
+  },
+  deleteUser: async (_: any, {id}: any, context: any) => {
+    try {
+      const userAuthError = verifyToken(context);
+      if (userAuthError) return {error: userAuthError, redirect: true};
+
+      const actualUser = await User.findOne({
+        where: {id: context.res.locals.user.id}
+      });
+
+      if (+actualUser.id !== +id) {
+        if (!verifyPosition(actualUser.position, "admin"))
+          return {error: "You do not have access to this action!"};
+      }
+      await User.destroy({where: {id}});
+      await UserInformation.destroy({where: {owner: id}});
+      return {error: "User deleted", redirect: +actualUser.id === +id};
+    } catch (error) {
+      return {error: "Server Error! Kod(125)"};
     }
   }
 };
