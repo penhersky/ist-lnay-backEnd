@@ -11,18 +11,23 @@ export default {
     },
     fails: async (parent: any, args: any, context: any) => {
       try {
-        return await File.findAll({where: {owner: parent.id}});
+        const files = await File.findAll({where: {owner: parent.id}});
+        return files.map((file: any) => file.path);
       } catch (error) {
         return {error: "Server Error! Kod(202)"};
       }
     },
     people: async (parent: any, args: any, context: any) => {
-      const usersInformation = await UserInformation.findAll({
-        where: {group: parent.id}
-      });
-      return usersInformation.map(async (userInformation: any) => {
-        return await User.findOne({where: {id: userInformation.owner}});
-      });
+      try {
+        const usersInformation = await UserInformation.findAll({
+          where: {group: parent.id}
+        });
+        return usersInformation.map(async (userInformation: any) => {
+          return await User.findOne({where: {id: userInformation.owner}});
+        });
+      } catch (error) {
+        return {error: "Server Error! Kod(203)"};
+      }
     }
   },
 

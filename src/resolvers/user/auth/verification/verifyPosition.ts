@@ -1,6 +1,8 @@
 export const positionDetermination = (position: String): number => {
   switch (position) {
     case "admin":
+      return 100;
+    case "Head of Cathedra":
       return 40;
     case "Teacher":
       return 30;

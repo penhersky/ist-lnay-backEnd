@@ -8,14 +8,14 @@ export const typeGroup = gql`
     information: String
     fails: [String]
     people: [user!]
-    createAt: String!
+    createdAt: String!
+    updatedAt: String!
   }
 
   input groupInput {
     name: String!
     cathedra: ID!
     information: String
-    fails: [String]
   }
 
   union groupRes = group | result
@@ -24,6 +24,7 @@ export const typeGroup = gql`
 export const groupQuery = gql`
   type queryGroup {
     getGroup(id: ID!): groupRes
+    getGroupsByCathedraId(id: ID!): [group!]
     getGroups: [group!]
   }
 `;
