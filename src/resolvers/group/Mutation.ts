@@ -4,11 +4,7 @@ import verifyToken from "../user/auth/verification/verifyToken";
 import verifyPosition from "../user/auth/verification/verifyPosition";
 
 export default {
-  addGroup: async (
-    _: any,
-    {name, cathedra, information}: any,
-    context: any
-  ) => {
+  addGroup: async (_: any, {input}: any, context: any) => {
     try {
       const authError = verifyToken(context);
       if (authError) return {error: authError, redirect: true};
@@ -18,13 +14,17 @@ export default {
       if (!verifyPosition(user.position, "Teacher"))
         return {error: "You do not have access to this action!"};
 
-      const validationError = await groupInput({name, cathedra, information});
+      const validationError = await groupInput({
+        name: input.name,
+        cathedra: input.cathedra,
+        information: input.information
+      });
       if (validationError) return {error: validationError};
 
       const newGroup = await Group.create({
-        name,
-        cathedra,
-        information
+        name: input.name,
+        cathedra: input.cathedra,
+        information: input.information
       });
       return newGroup;
     } catch (error) {

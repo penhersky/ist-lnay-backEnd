@@ -1,12 +1,16 @@
 import {UserTypes, UserQuery, userMutation} from "./user";
+import {GroupQuery, GroupTypes, groupMutation} from "./group";
 
 export default {
   Query: {
-    ...UserQuery
+    ...UserQuery,
+    ...GroupQuery
   },
 
   Mutation: {
-    ...userMutation
+    ...userMutation,
+    ...groupMutation
   },
-  ...UserTypes
+  ...UserTypes,
+  ...GroupTypes
 };

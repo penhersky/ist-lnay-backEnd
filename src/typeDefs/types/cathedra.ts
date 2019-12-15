@@ -7,14 +7,14 @@ export const typeCathedra = gql`
     faculty: String!
     information: String
     fails: [String]
-    createAt: String!
+    createdAt: String!
+    updatedAt: String!
   }
 
   input cathedraInput {
     name: String!
     faculty: String!
     information: String
-    fails: [String]
   }
 
   union cathedraRes = cathedra | result
@@ -23,6 +23,7 @@ export const typeCathedra = gql`
 export const cathedraQuery = gql`
   type queryCathedra {
     getCathedra(id: ID!): cathedraRes
+    getAllCathedraByFaculty(name: String!): [cathedra!]
     getAllCathedra: [cathedra!]
   }
 `;
