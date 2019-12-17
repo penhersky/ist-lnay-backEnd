@@ -1,4 +1,10 @@
-import {Cathedra, File, UserInformation, User} from "../../database/models";
+import {
+  Cathedra,
+  File,
+  UserInformation,
+  User,
+  Image
+} from "../../database/models";
 
 export default {
   group: {
@@ -11,10 +17,17 @@ export default {
     },
     fails: async (parent: any, args: any, context: any) => {
       try {
-        const files = await File.findAll({where: {owner: parent.id}});
-        return files.map((file: any) => file.path);
+        return await File.findAll({where: {owner: parent.id}});
       } catch (error) {
         return {error: "Server Error! Kod(202)"};
+      }
+    },
+    images: async (parent: any, args: any, context: any) => {
+      try {
+        const files = await Image.findAll({where: {owner: parent.id}});
+        return files.map((file: any) => file.path);
+      } catch (error) {
+        return {error: "Server Error! Kod(301)"};
       }
     },
     people: async (parent: any, args: any, context: any) => {

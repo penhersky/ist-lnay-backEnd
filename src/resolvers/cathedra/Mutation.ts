@@ -1,4 +1,4 @@
-import {Cathedra, User} from "../../database/models";
+import {Cathedra, User, Image} from "../../database/models";
 import verifyToken from "../user/auth/verification/verifyToken";
 import verifyPosition from "../user/auth/verification/verifyPosition";
 
@@ -20,7 +20,24 @@ export default {
         faculty: input.faculty,
         information: input.information
       });
-      return newCathedra;
+      if (input.images) {
+        await input.image.map(async (image: String) => {
+          Image.create({
+            path: image,
+            owner: newCathedra.id
+          });
+        });
+      }
+
+      return {
+        id: newCathedra.id,
+        name: newCathedra.name,
+        faculty: newCathedra.faculty,
+        information: newCathedra.information,
+        Images: input.Images,
+        createdAt: newCathedra.createdAt,
+        updatedAt: newCathedra.updatedAt
+      };
     } catch (error) {
       return {error: "Server Error! Kod(321)"};
     }
@@ -45,7 +62,23 @@ export default {
         faculty: input.faculty,
         information: input.information
       });
-      return cathedra;
+      if (input.images) {
+        await input.image.map(async (image: String) => {
+          Image.create({
+            path: image,
+            owner: cathedra.id
+          });
+        });
+      }
+      return {
+        id: cathedra.id,
+        name: cathedra.name,
+        faculty: cathedra.faculty,
+        information: cathedra.information,
+        Images: input.Images,
+        createdAt: cathedra.createdAt,
+        updatedAt: cathedra.updatedAt
+      };
     } catch (error) {
       return {error: "Server Error! Kod(322)"};
     }
@@ -62,7 +95,7 @@ export default {
       if (!verifyPosition(user.position, "Head of Cathedra"))
         return {error: "You do not have access to this action!"};
 
-      const cathedra = await Cathedra.destroy({where: {id}});
+      await Cathedra.destroy({where: {id}});
       return {message: "Cathedra deleted!"};
     } catch (error) {
       return {error: "Server Error! Kod(322)"};

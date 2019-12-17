@@ -1,4 +1,4 @@
-import {Group, User} from "../../database/models";
+import {Group, User, Image} from "../../database/models";
 import {groupInput} from "./_validationGroup";
 import verifyToken from "../user/auth/verification/verifyToken";
 import verifyPosition from "../user/auth/verification/verifyPosition";
@@ -26,7 +26,25 @@ export default {
         cathedra: input.cathedra,
         information: input.information
       });
-      return newGroup;
+
+      if (input.images) {
+        await input.image.map(async (image: String) => {
+          Image.create({
+            path: image,
+            owner: newGroup.id
+          });
+        });
+      }
+
+      return {
+        id: newGroup.id,
+        name: newGroup.name,
+        cathedra: newGroup.cathedra,
+        information: newGroup.information,
+        images: input.Images,
+        createdAt: newGroup,
+        updatedAt: newGroup
+      };
     } catch (error) {
       return {error: "Server Error! Kod(221)"};
     }
@@ -49,12 +67,30 @@ export default {
       if (validationError) return {error: validationError};
       const group = await Group.findOne({where: {id}});
       if (!group) return {error: "Group is not found!"};
+
       group.update({
         name: input.name,
         cathedra: input.cathedra,
         information: input.information
       });
-      return group;
+
+      if (input.images) {
+        await input.image.map(async (image: String) => {
+          Image.create({
+            path: image,
+            owner: group.id
+          });
+        });
+      }
+      return {
+        id: group.id,
+        name: group.name,
+        cathedra: group.cathedra,
+        information: group.information,
+        images: input.Images,
+        createdAt: group,
+        updatedAt: group
+      };
     } catch (error) {
       return {error: "Server Error! Kod(222)"};
     }

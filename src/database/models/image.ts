@@ -1,22 +1,20 @@
 import Sequelize from "sequelize";
 import sequelize from "../connect";
 
-export class File extends Sequelize.Model {
+export class Image extends Sequelize.Model {
   public id!: number;
   public path!: string;
   public owner!: number;
-  public name!: string;
-  public information!: string;
 
   public readonly createdAt!: Date;
 }
 
-type FileType = typeof Sequelize.Model & {
-  new (values?: object, options?: Sequelize.BuildOptions): File;
+type ImageType = typeof Sequelize.Model & {
+  new (values?: object, options?: Sequelize.BuildOptions): Image;
 };
 
-const FileModel = <FileType>sequelize.define(
-  "File",
+const ImageModel = <ImageType>sequelize.define(
+  "Image",
   {
     id: {
       type: Sequelize.DataTypes.INTEGER,
@@ -30,14 +28,6 @@ const FileModel = <FileType>sequelize.define(
     owner: {
       type: new Sequelize.DataTypes.INTEGER(),
       allowNull: true
-    },
-    name: {
-      type: new Sequelize.DataTypes.STRING(84),
-      allowNull: false
-    },
-    information: {
-      type: new Sequelize.DataTypes.STRING(512),
-      allowNull: false
     }
   },
   {
@@ -45,4 +35,4 @@ const FileModel = <FileType>sequelize.define(
   }
 );
 
-export default FileModel;
+export default ImageModel;

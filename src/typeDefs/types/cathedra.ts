@@ -6,7 +6,7 @@ export const typeCathedra = gql`
     name: String!
     faculty: String!
     information: String
-    fails: [String]
+    images: [String]
     createdAt: String!
     updatedAt: String!
   }
@@ -15,6 +15,7 @@ export const typeCathedra = gql`
     name: String!
     faculty: String!
     information: String
+    Images: [String]
   }
 
   union cathedraRes = cathedra | result

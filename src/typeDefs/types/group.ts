@@ -6,7 +6,8 @@ export const typeGroup = gql`
     name: String!
     cathedra: cathedra!
     information: String
-    fails: [String]
+    fails: [File]
+    images: [String]
     people: [user!]
     createdAt: String!
     updatedAt: String!
@@ -16,6 +17,7 @@ export const typeGroup = gql`
     name: String!
     cathedra: ID!
     information: String
+    images: [String]
   }
 
   union groupRes = group | result

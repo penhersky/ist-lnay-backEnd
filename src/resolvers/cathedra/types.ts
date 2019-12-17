@@ -1,10 +1,10 @@
-import {File} from "../../database/models";
+import {Image} from "../../database/models";
 
 export default {
   cathedra: {
-    fails: async (parent: any, args: any, context: any) => {
+    images: async (parent: any, args: any, context: any) => {
       try {
-        const files = await File.findAll({where: {owner: parent.id}});
+        const files = await Image.findAll({where: {owner: parent.id}});
         return files.map((file: any) => file.path);
       } catch (error) {
         return {error: "Server Error! Kod(301)"};
