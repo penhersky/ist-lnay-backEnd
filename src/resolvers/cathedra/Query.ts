@@ -1,5 +1,18 @@
 import {Cathedra, Image} from "../../database/models";
 
+const addImageToCathedra = async (cathedra: any) => {
+  const images = await Image.findAll({where: {owner: cathedra.id}});
+  return {
+    id: cathedra.id,
+    name: cathedra.name,
+    faculty: cathedra.faculty,
+    information: cathedra.information,
+    Images: images.map((image: any) => image.path),
+    createdAt: cathedra.createdAt,
+    updatedAt: cathedra.updatedAt
+  };
+};
+
 export default {
   getCathedra: async (_: any, {id}: any, context: any) => {
     try {
@@ -30,17 +43,4 @@ export default {
       return {error: "Server Error! Kod(312)"};
     }
   }
-};
-
-const addImageToCathedra = async (cathedra: any) => {
-  const images = await Image.findAll({where: {owner: cathedra.id}});
-  return {
-    id: cathedra.id,
-    name: cathedra.name,
-    faculty: cathedra.faculty,
-    information: cathedra.information,
-    Images: images.map((image: any) => image.path),
-    createdAt: cathedra.createdAt,
-    updatedAt: cathedra.updatedAt
-  };
 };

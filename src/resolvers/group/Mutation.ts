@@ -27,12 +27,10 @@ export default {
         information: input.information
       });
 
-      if (input.images) {
-        await input.image.map(async (image: String) => {
-          Image.create({
-            path: image,
-            owner: newGroup.id
-          });
+      if (input.image) {
+        await Image.create({
+          path: input.image,
+          owner: newGroup.id
         });
       }
 
@@ -41,7 +39,7 @@ export default {
         name: newGroup.name,
         cathedra: newGroup.cathedra,
         information: newGroup.information,
-        images: input.Images,
+        image: input.Image,
         createdAt: newGroup,
         updatedAt: newGroup
       };
@@ -74,22 +72,22 @@ export default {
         information: input.information
       });
 
-      if (input.images) {
-        await input.image.map(async (image: String) => {
-          Image.create({
-            path: image,
-            owner: group.id
-          });
-        });
-      }
+      const image = await Image.findOrCreate({
+        where: {owner: group.id},
+        defaults: {
+          path: input.image,
+          owner: group.id
+        }
+      });
+
       return {
         id: group.id,
         name: group.name,
         cathedra: group.cathedra,
         information: group.information,
-        images: input.Images,
-        createdAt: group,
-        updatedAt: group
+        image: image.image.path,
+        createdAt: group.createdAt,
+        updatedAt: group.updatedAt
       };
     } catch (error) {
       return {error: "Server Error! Kod(222)"};

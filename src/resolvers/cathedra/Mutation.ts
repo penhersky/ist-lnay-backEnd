@@ -21,8 +21,8 @@ export default {
         information: input.information
       });
       if (input.images) {
-        await input.image.map(async (image: String) => {
-          Image.create({
+        await input.image.map(async (image: string) => {
+          await Image.create({
             path: image,
             owner: newCathedra.id
           });
@@ -63,10 +63,13 @@ export default {
         information: input.information
       });
       if (input.images) {
-        await input.image.map(async (image: String) => {
-          Image.create({
-            path: image,
-            owner: cathedra.id
+        await input.image.map(async (image: string) => {
+          await Image.findOrCreate({
+            where: {path: image, owner: cathedra.id},
+            defaults: {
+              path: image,
+              owner: cathedra.id
+            }
           });
         });
       }

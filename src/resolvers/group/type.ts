@@ -5,6 +5,7 @@ import {
   User,
   Image
 } from "../../database/models";
+import {fileMutation} from "../../typeDefs/types/file";
 
 export default {
   group: {
@@ -22,10 +23,10 @@ export default {
         return {error: "Server Error! Kod(202)"};
       }
     },
-    images: async (parent: any, args: any, context: any) => {
+    image: async (parent: any, args: any, context: any) => {
       try {
-        const files = await Image.findAll({where: {owner: parent.id}});
-        return files.map((file: any) => file.path);
+        const files = await Image.findOne({where: {owner: parent.id}});
+        return files.path;
       } catch (error) {
         return {error: "Server Error! Kod(301)"};
       }
@@ -45,7 +46,7 @@ export default {
   },
 
   groupRes: {
-    __resolveType(obj: any, context: any, info: any) {
+    __resolveType(obj: any, context: any, info: any): string | null {
       if (obj.message || obj.error) {
         return "result";
       }

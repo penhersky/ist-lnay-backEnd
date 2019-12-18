@@ -14,5 +14,6 @@ export default gql`
     User: userMutation
     Group: mutationGroup
     Cathedra: mutationCathedra
+    File: mutationFile
   }
 `;

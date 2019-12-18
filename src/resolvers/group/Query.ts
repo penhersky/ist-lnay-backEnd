@@ -1,5 +1,18 @@
 import {Group, Image} from "../../database/models";
 
+const addImageToGroup = async (cathedra: any): Promise<any> => {
+  const image = await Image.findOne({where: {owner: cathedra.id}});
+  return {
+    id: cathedra.id,
+    name: cathedra.name,
+    faculty: cathedra.faculty,
+    information: cathedra.information,
+    image: image.path,
+    createdAt: cathedra.createdAt,
+    updatedAt: cathedra.updatedAt
+  };
+};
+
 export default {
   getGroup: async (_: any, {id}: any, context: any) => {
     try {
@@ -30,17 +43,4 @@ export default {
       return {error: "Server Error! Kod(213)"};
     }
   }
-};
-
-const addImageToGroup = async (cathedra: any) => {
-  const images = await Image.findAll({where: {owner: cathedra.id}});
-  return {
-    id: cathedra.id,
-    name: cathedra.name,
-    faculty: cathedra.faculty,
-    information: cathedra.information,
-    Images: images.map((image: any) => image.path),
-    createdAt: cathedra.createdAt,
-    updatedAt: cathedra.updatedAt
-  };
 };

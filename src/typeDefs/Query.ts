@@ -8,5 +8,6 @@ export default gql`
     User: queryUser
     Group: queryGroup
     Cathedra: queryCathedra
+    File: queryFile
   }
 `;

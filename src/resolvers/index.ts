@@ -1,16 +1,24 @@
 import {UserTypes, UserQuery, userMutation} from "./user";
 import {GroupQuery, GroupTypes, groupMutation} from "./group";
+import {cathedraQuery, cathedraTypes, cathedraMutation} from "./cathedra";
+import {QueryFile, fileTypes, MutationFile} from "./file";
 
 export default {
   Query: {
     ...UserQuery,
-    ...GroupQuery
+    ...GroupQuery,
+    ...cathedraQuery,
+    ...QueryFile
   },
 
   Mutation: {
     ...userMutation,
-    ...groupMutation
+    ...groupMutation,
+    ...cathedraMutation,
+    ...MutationFile
   },
   ...UserTypes,
-  ...GroupTypes
+  ...GroupTypes,
+  ...cathedraTypes,
+  ...fileTypes
 };
