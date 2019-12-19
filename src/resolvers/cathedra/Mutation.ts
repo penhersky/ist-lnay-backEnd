@@ -86,7 +86,7 @@ export default {
       return {error: "Server Error! Kod(322)"};
     }
   },
-  deleteCathedra: async (_: any, {id, input}: any, context: any) => {
+  deleteCathedra: async (_: any, {id}: any, context: any) => {
     try {
       const authError = verifyToken(context);
       if (authError) return {error: authError, redirect: true};
@@ -99,6 +99,8 @@ export default {
         return {error: "You do not have access to this action!"};
 
       await Cathedra.destroy({where: {id}});
+      await Image.destroy({where: {owner: id}});
+
       return {message: "Cathedra deleted!"};
     } catch (error) {
       return {error: "Server Error! Kod(322)"};

@@ -25,7 +25,7 @@ const NewsModel = <NewsType>sequelize.define(
     },
     title: {
       type: new Sequelize.DataTypes.STRING(256),
-      allowNull: true
+      allowNull: false
     },
     body: {
       type: new Sequelize.DataTypes.STRING(4024),
@@ -33,11 +33,12 @@ const NewsModel = <NewsType>sequelize.define(
     },
     author: {
       type: new Sequelize.DataTypes.INTEGER(),
-      allowNull: true
+      allowNull: false
     },
     views: {
       type: new Sequelize.DataTypes.INTEGER(),
-      allowNull: false
+      allowNull: false,
+      defaultValue: 0
     }
   },
   {

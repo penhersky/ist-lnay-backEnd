@@ -23,14 +23,6 @@ export default {
         return {error: "Server Error! Kod(202)"};
       }
     },
-    image: async (parent: any, args: any, context: any) => {
-      try {
-        const files = await Image.findOne({where: {owner: parent.id}});
-        return files.path;
-      } catch (error) {
-        return {error: "Server Error! Kod(301)"};
-      }
-    },
     people: async (parent: any, args: any, context: any) => {
       try {
         const usersInformation = await UserInformation.findAll({

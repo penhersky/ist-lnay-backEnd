@@ -9,9 +9,9 @@ export const fileTypes = {
 };
 
 export const QueryFile = {
-  File: queryFile
+  File: queryFile.getFile
 };
 
 export const MutationFile = {
-  File: mutationFile
+  File: mutationFile.addFile
 };

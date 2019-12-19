@@ -62,7 +62,9 @@ export default {
         confirmed: true,
         password: hashPassword
       });
-      await UserInformation.create({});
+      await UserInformation.create({
+        owner: user.id
+      });
       return {message: "Registration was successful!"};
     } catch (error) {
       if (isDevelopment) console.log(error);

@@ -25,11 +25,11 @@ const FileModel = <FileType>sequelize.define(
     },
     path: {
       type: new Sequelize.DataTypes.STRING(256),
-      allowNull: true
+      allowNull: false
     },
     owner: {
       type: new Sequelize.DataTypes.INTEGER(),
-      allowNull: true
+      allowNull: false
     },
     name: {
       type: new Sequelize.DataTypes.STRING(84),
@@ -37,7 +37,7 @@ const FileModel = <FileType>sequelize.define(
     },
     information: {
       type: new Sequelize.DataTypes.STRING(512),
-      allowNull: false
+      allowNull: true
     }
   },
   {

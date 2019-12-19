@@ -1,4 +1,4 @@
-import {Group, User, Image} from "../../database/models";
+import {Group, User, File} from "../../database/models";
 import {groupInput} from "./_validationGroup";
 import verifyToken from "../user/auth/verification/verifyToken";
 import verifyPosition from "../user/auth/verification/verifyPosition";
@@ -24,25 +24,11 @@ export default {
       const newGroup = await Group.create({
         name: input.name,
         cathedra: input.cathedra,
+        image: input.image,
         information: input.information
       });
 
-      if (input.image) {
-        await Image.create({
-          path: input.image,
-          owner: newGroup.id
-        });
-      }
-
-      return {
-        id: newGroup.id,
-        name: newGroup.name,
-        cathedra: newGroup.cathedra,
-        information: newGroup.information,
-        image: input.Image,
-        createdAt: newGroup,
-        updatedAt: newGroup
-      };
+      return newGroup;
     } catch (error) {
       return {error: "Server Error! Kod(221)"};
     }
@@ -69,26 +55,11 @@ export default {
       group.update({
         name: input.name,
         cathedra: input.cathedra,
+        image: input.image,
         information: input.information
       });
 
-      const image = await Image.findOrCreate({
-        where: {owner: group.id},
-        defaults: {
-          path: input.image,
-          owner: group.id
-        }
-      });
-
-      return {
-        id: group.id,
-        name: group.name,
-        cathedra: group.cathedra,
-        information: group.information,
-        image: image.image.path,
-        createdAt: group.createdAt,
-        updatedAt: group.updatedAt
-      };
+      return group;
     } catch (error) {
       return {error: "Server Error! Kod(222)"};
     }
@@ -103,6 +74,7 @@ export default {
       if (!verifyPosition(user.position, "Teacher"))
         return {error: "You do not have access to this action!"};
       await Group.destroy({where: {id}});
+      await File.destroy({where: {owner: id}});
       return {message: "Group deleted!"};
     } catch (error) {
       return {error: "Server Error! Kod(223)"};

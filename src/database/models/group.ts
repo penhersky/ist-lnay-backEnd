@@ -27,12 +27,16 @@ const GroupModel = <GroupType>sequelize.define(
       allowNull: false
     },
     cathedra: {
-      type: new Sequelize.DataTypes.NUMBER(),
+      type: new Sequelize.DataTypes.INTEGER(),
       allowNull: false
     },
     information: {
       type: new Sequelize.DataTypes.STRING(4024),
-      allowNull: false
+      allowNull: true
+    },
+    image: {
+      type: new Sequelize.DataTypes.STRING(256),
+      allowNull: true
     }
   },
   {

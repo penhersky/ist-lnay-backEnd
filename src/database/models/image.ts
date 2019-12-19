@@ -23,11 +23,11 @@ const ImageModel = <ImageType>sequelize.define(
     },
     path: {
       type: new Sequelize.DataTypes.STRING(256),
-      allowNull: true
+      allowNull: false
     },
     owner: {
       type: new Sequelize.DataTypes.INTEGER(),
-      allowNull: true
+      allowNull: false
     }
   },
   {

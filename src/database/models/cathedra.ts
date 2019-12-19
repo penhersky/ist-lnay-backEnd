@@ -28,11 +28,11 @@ const CathedraModel = <CathedraType>sequelize.define(
     },
     faculty: {
       type: new Sequelize.DataTypes.STRING(128),
-      allowNull: false
+      allowNull: true
     },
     information: {
       type: new Sequelize.DataTypes.STRING(128),
-      allowNull: false
+      allowNull: true
     }
   },
   {

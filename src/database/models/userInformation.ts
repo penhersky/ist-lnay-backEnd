@@ -10,8 +10,8 @@ export class UserInformation extends Sequelize.Model {
   public phonNumber!: string;
   public studentNumber!: number;
   public born!: string;
-  public residence!: String;
-  public otherInformation!: String;
+  public residence!: string;
+  public otherInformation!: string;
 
   public readonly createdAt!: Date;
 }
@@ -30,39 +30,39 @@ const UserInformationModel = <UserType>sequelize.define(
     },
     owner: {
       type: new Sequelize.DataTypes.INTEGER(),
-      allowNull: true
+      allowNull: false
     },
     group: {
       type: new Sequelize.DataTypes.INTEGER(),
-      allowNull: false
+      allowNull: true
     },
     cathedra: {
       type: new Sequelize.DataTypes.INTEGER(),
-      allowNull: false
+      allowNull: true
     },
     faculty: {
       type: new Sequelize.DataTypes.STRING(48),
-      allowNull: false
+      allowNull: true
     },
     phonNumber: {
       type: Sequelize.DataTypes.STRING(13),
-      allowNull: false
+      allowNull: true
     },
     studentNumber: {
       type: new Sequelize.DataTypes.INTEGER(),
-      allowNull: false
+      allowNull: true
     },
     born: {
       type: new Sequelize.DataTypes.STRING(28),
-      allowNull: false
+      allowNull: true
     },
     residence: {
       type: new Sequelize.DataTypes.STRING(128),
-      allowNull: false
+      allowNull: true
     },
     otherInformation: {
       type: new Sequelize.DataTypes.STRING(2040),
-      allowNull: false
+      allowNull: true
     }
   },
   {

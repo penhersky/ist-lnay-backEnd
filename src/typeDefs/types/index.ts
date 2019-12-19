@@ -4,6 +4,7 @@ import result from "./result";
 import {typeGroup, groupQuery, groupMutation} from "./group";
 import {typeCathedra, cathedraQuery, cathedraMutation} from "./cathedra";
 import {fileMutation, typeFile, fileQuery} from "./file";
+import {newsMutation, typeNews, newsQuery} from "./news";
 
 import {typeUser} from "./user/userType";
 import userQuery from "./user/userQuery";
@@ -14,17 +15,20 @@ export const types = concatenateTypeDefs([
   typeUser,
   typeGroup,
   typeCathedra,
-  typeFile
+  typeFile,
+  typeNews
 ]);
 export const typeQuery = concatenateTypeDefs([
   userQuery,
   groupQuery,
   cathedraQuery,
-  fileQuery
+  fileQuery,
+  newsQuery
 ]);
 export const typeMutation = concatenateTypeDefs([
   userMutation,
   groupMutation,
   cathedraMutation,
-  fileMutation
+  fileMutation,
+  newsMutation
 ]);
