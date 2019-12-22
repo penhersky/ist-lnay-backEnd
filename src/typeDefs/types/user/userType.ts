@@ -42,5 +42,12 @@ export const typeUser = gql`
     otherInformation: String
   }
 
+  type users {
+    countPage: Int
+    currentPage: Int
+    users: [user]
+    error: String
+  }
+
   union userRes = user | result
 `;

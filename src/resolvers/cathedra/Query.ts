@@ -1,4 +1,5 @@
 import {Cathedra, Image} from "../../database/models";
+import pagination from "../pagination";
 
 const addImageToCathedra = async (cathedra: any) => {
   const images = await Image.findAll({where: {owner: cathedra.id}});
@@ -23,22 +24,41 @@ export default {
       return {error: "Server Error! Kod(311)"};
     }
   },
-  getAllCathedraByFaculty: async (_: any, {name}: any, context: any) => {
+  getAllCathedraByFaculty: async (
+    _: any,
+    {name, page, itemsPerPage}: any,
+    context: any
+  ) => {
     try {
       const allCathedra = await Cathedra.findAll({where: {faculty: name}});
-      return await allCathedra.map(
+      const allCathedraWithImg = await allCathedra.map(
         async (cathedra: any) => await addImageToCathedra(cathedra)
       );
+      const returnPage = pagination(allCathedraWithImg, page, itemsPerPage);
+
+      return {
+        countPage: returnPage.count,
+        currentPage: returnPage.count ? page : undefined,
+        groups: returnPage.arr
+      };
     } catch (error) {
       return {error: "Server Error! Kod(312)"};
     }
   },
-  getAllCathedra: async (_: any, args: any, context: any) => {
+  getAllCathedra: async (_: any, {page, itemsPerPage}: any, context: any) => {
     try {
       const allCathedra = await Cathedra.findAll();
-      return await allCathedra.map(
+      const allCathedraWithImg = await allCathedra.map(
         async (cathedra: any) => await addImageToCathedra(cathedra)
       );
+
+      const returnPage = pagination(allCathedraWithImg, page, itemsPerPage);
+
+      return {
+        countPage: returnPage.count,
+        currentPage: returnPage.count ? page : undefined,
+        groups: returnPage.arr
+      };
     } catch (error) {
       return {error: "Server Error! Kod(312)"};
     }

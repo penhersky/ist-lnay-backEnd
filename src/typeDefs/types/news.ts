@@ -26,7 +26,7 @@ export const newsQuery = gql`
   type queryNews {
     getNews(id: ID!): newsRes
     getNewsByUserId(id: ID!, page: Int): [news!]
-    getNews(page: Int): [news!]
+    getAllNews(page: Int): [news!]
   }
 `;
 

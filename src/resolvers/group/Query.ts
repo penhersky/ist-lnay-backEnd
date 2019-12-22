@@ -1,4 +1,5 @@
 import {Group} from "../../database/models";
+import pagination from "../pagination";
 
 export default {
   getGroup: async (_: any, {id}: any, context: any) => {
@@ -10,16 +11,34 @@ export default {
       return {error: "Server Error! Kod(211)"};
     }
   },
-  getGroupsByCathedraId: async (_: any, {id}: any, context: any) => {
+  getGroupsByCathedraId: async (
+    _: any,
+    {id, page, itemsPerPage}: any,
+    context: any
+  ) => {
     try {
-      return await Group.findAll({where: {cathedra: id}});
+      const allGroup = await Group.findAll({where: {cathedra: id}});
+      const returnPage = pagination(allGroup, page, itemsPerPage);
+
+      return {
+        countPage: returnPage.count,
+        currentPage: returnPage.count ? page : undefined,
+        groups: returnPage.arr
+      };
     } catch (error) {
       return {error: "Server Error! Kod(212)"};
     }
   },
-  getGroups: async (_: any, args: any, context: any) => {
+  getGroups: async (_: any, {page, itemsPerPage}: any, context: any) => {
     try {
-      return await Group.findAll();
+      const allGroup = await Group.findAll();
+      const returnPage = pagination(allGroup, page, itemsPerPage);
+
+      return {
+        countPage: returnPage.count,
+        currentPage: returnPage.count ? page : undefined,
+        groups: returnPage.arr
+      };
     } catch (error) {
       return {error: "Server Error! Kod(213)"};
     }

@@ -18,14 +18,25 @@ export const typeCathedra = gql`
     Images: [String]
   }
 
+  type allCathedra {
+    countPage: Int
+    currentPage: Int
+    allCathedra: [cathedra]
+    error: String
+  }
+
   union cathedraRes = cathedra | result
 `;
 
 export const cathedraQuery = gql`
   type queryCathedra {
     getCathedra(id: ID!): cathedraRes
-    getAllCathedraByFaculty(name: String!): [cathedra!]
-    getAllCathedra: [cathedra!]
+    getAllCathedraByFaculty(
+      name: String!
+      page: Int
+      itemsPerPage: Int
+    ): allCathedra
+    getAllCathedra(page: Int, itemsPerPage: Int): allCathedra
   }
 `;
 

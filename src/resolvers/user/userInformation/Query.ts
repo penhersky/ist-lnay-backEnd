@@ -1,4 +1,5 @@
 import {User, UserInformation} from "../.../../../../database/models";
+import pagination from "../../pagination";
 
 export default {
   getUser: async (_: any, args: any, context: any) => {
@@ -19,10 +20,10 @@ export default {
       return {error: "Server Error! Kod(111)"};
     }
   },
-  getUsers: async (_: any, args: any, context: any) => {
+  getUsers: async (_: any, {page, itemsPerPage}: any, context: any) => {
     try {
       const users = await User.findAll();
-      return users.map((user: any) => ({
+      const resUser = users.map((user: any) => ({
         id: user.id,
         name: user.name,
         surname: user.surname,
@@ -32,32 +33,61 @@ export default {
         createdAt: user.createdAt,
         updatedAt: user.updatedAt
       }));
+      const returnPage = pagination(resUser, page, itemsPerPage);
+
+      return {
+        countPage: returnPage.count,
+        currentPage: returnPage.count ? page : undefined,
+        users: returnPage.arr
+      };
     } catch (error) {
       return {error: "Server Error! Kod(112)"};
     }
   },
-  getUsersByGroupID: async (_: any, {id}: any, context: any) => {
+  getUsersByGroupID: async (
+    _: any,
+    {id, page, itemsPerPage}: any,
+    context: any
+  ) => {
     try {
       const UsersInformation = await UserInformation.findAll({
         where: {group: id}
       });
-      return await UsersInformation.map(
+      const resUser = await UsersInformation.map(
         async (userInformation: any) =>
           await User.findOne({where: {id: userInformation.owner}})
       );
+      const returnPage = pagination(resUser, page, itemsPerPage);
+
+      return {
+        countPage: returnPage.count,
+        currentPage: returnPage.count ? page : undefined,
+        users: returnPage.arr
+      };
     } catch (error) {
       return {error: "Server Error! Kod(113)"};
     }
   },
-  getUsersByCathedraID: async (_: any, {id}: any, context: any) => {
+  getUsersByCathedraID: async (
+    _: any,
+    {id, page, itemsPerPage}: any,
+    context: any
+  ) => {
     try {
       const UsersInformation = await UserInformation.findAll({
         where: {cathedra: id}
       });
-      return await UsersInformation.map(
+      const resUser = await UsersInformation.map(
         async (userInformation: any) =>
           await User.findOne({where: {id: userInformation.owner}})
       );
+      const returnPage = pagination(resUser, page, itemsPerPage);
+
+      return {
+        countPage: returnPage.count,
+        currentPage: returnPage.count ? page : undefined,
+        users: returnPage.arr
+      };
     } catch (error) {
       return {error: "Server Error! Kod(114)"};
     }

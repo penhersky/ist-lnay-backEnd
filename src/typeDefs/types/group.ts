@@ -20,14 +20,21 @@ export const typeGroup = gql`
     image: String
   }
 
+  type groups {
+    countPage: Int
+    currentPage: Int
+    groups: [group]
+    error: String
+  }
+
   union groupRes = group | result
 `;
 
 export const groupQuery = gql`
   type queryGroup {
     getGroup(id: ID!): groupRes
-    getGroupsByCathedraId(id: ID!): [group!]
-    getGroups: [group!]
+    getGroupsByCathedraId(id: ID!, page: Int, itemsPerPage: Int): groups
+    getGroups(page: Int, itemsPerPage: Int): groups
   }
 `;
 
