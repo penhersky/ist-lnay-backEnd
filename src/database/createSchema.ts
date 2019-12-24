@@ -5,7 +5,8 @@ import {
   File,
   Cathedra,
   UserInformation,
-  Image
+  Image,
+  FileNews
 } from "./models/index";
 
 const createSchemas = async () => {
@@ -16,6 +17,7 @@ const createSchemas = async () => {
   await News.sync({force: true});
   await UserInformation.sync({force: true});
   await Image.sync({force: true});
+  await FileNews.sync({force: true});
 };
 
 export default createSchemas;

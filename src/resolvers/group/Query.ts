@@ -17,7 +17,10 @@ export default {
     context: any
   ) => {
     try {
-      const allGroup = await Group.findAll({where: {cathedra: id}});
+      const allGroup = await Group.findAll({
+        where: {cathedra: id},
+        order: [["id", "DESC"]]
+      });
       const returnPage = pagination(allGroup, page, itemsPerPage);
 
       return {
@@ -31,7 +34,7 @@ export default {
   },
   getGroups: async (_: any, {page, itemsPerPage}: any, context: any) => {
     try {
-      const allGroup = await Group.findAll();
+      const allGroup = await Group.findAll({order: [["id", "DESC"]]});
       const returnPage = pagination(allGroup, page, itemsPerPage);
 
       return {

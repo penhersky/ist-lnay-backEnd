@@ -9,5 +9,6 @@ export default gql`
     Group: queryGroup
     Cathedra: queryCathedra
     File: queryFile
+    News: queryNews
   }
 `;

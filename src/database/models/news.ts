@@ -7,6 +7,9 @@ export class News extends Sequelize.Model {
   public body!: string;
   public author!: number;
   public views!: number;
+  public group!: number;
+  public cathedra!: number;
+  public levelOfOpenness!: string;
 
   public readonly createdAt!: Date;
 }
@@ -39,6 +42,18 @@ const NewsModel = <NewsType>sequelize.define(
       type: new Sequelize.DataTypes.INTEGER(),
       allowNull: false,
       defaultValue: 0
+    },
+    group: {
+      type: new Sequelize.DataTypes.INTEGER(),
+      allowNull: true
+    },
+    cathedra: {
+      type: new Sequelize.DataTypes.INTEGER(),
+      allowNull: true
+    },
+    levelOfOpenness: {
+      type: new Sequelize.DataTypes.STRING(),
+      allowNull: true
     }
   },
   {

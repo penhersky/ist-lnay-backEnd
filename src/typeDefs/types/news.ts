@@ -7,9 +7,11 @@ export const typeNews = gql`
     body: String!
     author: user!
     views: Int!
+    group: group
+    cathedra: cathedra
     video: String
-    image: [String]
-    fills: [String]
+    images: [String]
+    filles: [String]
     createdAt: String!
     updatedAt: String!
   }
@@ -17,7 +19,11 @@ export const typeNews = gql`
   input newsInput {
     title: String!
     body: String!
-    image: [String]
+    group: ID
+    cathedra: ID
+    video: String
+    images: [String]
+    filles: [String]
     author: ID!
   }
 
@@ -34,8 +40,10 @@ export const typeNews = gql`
 export const newsQuery = gql`
   type queryNews {
     getNews(id: ID!): newsRes
-    getNewsByUserId(id: ID!, page: Int): [news!]
-    getAllNews(page: Int): [news!]
+    getNewsByOwnerId(id: ID!, page: Int, itemsPerPage: Int): [news!]
+    getNewsByGroupId(id: ID!, page: Int, itemsPerPage: Int): [news!]
+    getNewsByCathedraId(id: ID!, page: Int, itemsPerPage: Int): [news!]
+    getAllNews(page: Int, itemsPerPage: Int): [news!]
   }
 `;
 
