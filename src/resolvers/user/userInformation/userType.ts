@@ -23,7 +23,7 @@ export const user = {
   additionalInformation: async (parent: any, args: any, context: any) => {
     try {
       return await UserInformation.findOne({
-        where: {id: parent.additionalInformation}
+        where: {id: parent.id}
       });
     } catch (error) {
       return {error: "Server Error! Kod(103)"};

@@ -7,7 +7,9 @@ export const typeNews = gql`
     body: String!
     author: user!
     views: Int!
+    video: String
     image: [String]
+    fills: [String]
     createdAt: String!
     updatedAt: String!
   }
@@ -17,6 +19,13 @@ export const typeNews = gql`
     body: String!
     image: [String]
     author: ID!
+  }
+
+  type allNews {
+    countPage: Int
+    currentPage: Int
+    groups: [news]
+    error: String
   }
 
   union newsRes = news | result
