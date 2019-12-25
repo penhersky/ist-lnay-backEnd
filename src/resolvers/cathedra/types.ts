@@ -1,13 +1,19 @@
 import {Image} from "../../database/models";
+import _ from "lodash";
 
 export default {
   cathedra: {
     images: async (parent: any, args: any, context: any) => {
       try {
-        const files = await Image.findAll({where: {owner: parent.id}});
-        return files.map((file: any) => file.path);
+        const images = await Image.findAll({where: {owner: parent.id}});
+        if (!images) return [];
+        return _.map(images, image =>
+          _(image)
+            .pick(image, ["path"])
+            .value()
+        );
       } catch (error) {
-        return {error: "Server Error! Kod(301)"};
+        return [];
       }
     }
   },

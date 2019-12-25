@@ -1,25 +1,12 @@
-import {Cathedra, Image} from "../../database/models";
+import {Cathedra} from "../../database/models";
 import pagination from "../pagination";
-
-const addImageToCathedra = async (cathedra: any) => {
-  const images = await Image.findAll({where: {owner: cathedra.id}});
-  return {
-    id: cathedra.id,
-    name: cathedra.name,
-    faculty: cathedra.faculty,
-    information: cathedra.information,
-    Images: images.map((image: any) => image.path),
-    createdAt: cathedra.createdAt,
-    updatedAt: cathedra.updatedAt
-  };
-};
 
 export default {
   getCathedra: async (_: any, {id}: any, context: any) => {
     try {
       const cathedra = await Cathedra.findOne({where: {id}});
       if (!cathedra) return {error: "Cathedra is not found!"};
-      return await addImageToCathedra(cathedra);
+      return await cathedra;
     } catch (error) {
       return {error: "Server Error! Kod(311)"};
     }
@@ -34,10 +21,8 @@ export default {
         where: {faculty: name},
         order: [["id", "DESC"]]
       });
-      const allCathedraWithImg = await allCathedra.map(
-        async (cathedra: any) => await addImageToCathedra(cathedra)
-      );
-      const returnPage = pagination(allCathedraWithImg, page, itemsPerPage);
+
+      const returnPage = pagination(allCathedra, page, itemsPerPage);
 
       return {
         countPage: returnPage.count,
@@ -51,11 +36,8 @@ export default {
   getAllCathedra: async (_: any, {page, itemsPerPage}: any, context: any) => {
     try {
       const allCathedra = await Cathedra.findAll({order: [["id", "DESC"]]});
-      const allCathedraWithImg = await allCathedra.map(
-        async (cathedra: any) => await addImageToCathedra(cathedra)
-      );
 
-      const returnPage = pagination(allCathedraWithImg, page, itemsPerPage);
+      const returnPage = pagination(allCathedra, page, itemsPerPage);
 
       return {
         countPage: returnPage.count,

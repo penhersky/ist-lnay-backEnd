@@ -29,18 +29,26 @@ export default {
         const allImages = await FileNews.findAll({
           where: {id: parent.cathedra, type: "image"}
         });
-        return _.map(allImages.dataValues, (image: any) => _.pick(["path"]));
+        if (!allImages) return [];
+        return _.map(allImages.dataValues, (image: any) =>
+          _(allImages)
+            .pick(image, ["path"])
+            .value()
+        );
       } catch (error) {
         return [];
       }
     },
     files: async (parent: any, args: any, context: any) => {
       try {
-        const allImages = await FileNews.findAll({
+        const allFiles = await FileNews.findAll({
           where: {id: parent.cathedra, type: "file"}
         });
-        return _.map(allImages.dataValues, (image: any) =>
-          _.pick(image, ["path"])
+        if (!allFiles) return [];
+        return _.map(allFiles.dataValues, (file: any) =>
+          _(allFiles)
+            .pick(file, ["path"])
+            .value()
         );
       } catch (error) {
         return [];

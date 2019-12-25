@@ -15,7 +15,7 @@ export const typeCathedra = gql`
     name: String!
     faculty: String!
     information: String
-    Images: [String]
+    images: [String]
   }
 
   type allCathedra {

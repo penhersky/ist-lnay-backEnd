@@ -1,11 +1,4 @@
-import {
-  Cathedra,
-  File,
-  UserInformation,
-  User,
-  Image
-} from "../../database/models";
-import {fileMutation} from "../../typeDefs/types/file";
+import {Cathedra, File, UserInformation, User} from "../../database/models";
 
 export default {
   group: {
@@ -13,14 +6,14 @@ export default {
       try {
         return await Cathedra.findOne({where: {id: parent.cathedra}});
       } catch (error) {
-        return {error: "Server Error! Kod(201)"};
+        return null;
       }
     },
     fails: async (parent: any, args: any, context: any) => {
       try {
         return await File.findAll({where: {owner: parent.id}});
       } catch (error) {
-        return {error: "Server Error! Kod(202)"};
+        return [];
       }
     },
     people: async (parent: any, args: any, context: any) => {
@@ -32,7 +25,7 @@ export default {
           return await User.findOne({where: {id: userInformation.owner}});
         });
       } catch (error) {
-        return {error: "Server Error! Kod(203)"};
+        return null;
       }
     }
   },
