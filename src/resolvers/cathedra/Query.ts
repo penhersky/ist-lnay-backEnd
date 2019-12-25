@@ -30,7 +30,10 @@ export default {
     context: any
   ) => {
     try {
-      const allCathedra = await Cathedra.findAll({where: {faculty: name}});
+      const allCathedra = await Cathedra.findAll({
+        where: {faculty: name},
+        order: [["id", "DESC"]]
+      });
       const allCathedraWithImg = await allCathedra.map(
         async (cathedra: any) => await addImageToCathedra(cathedra)
       );
@@ -47,7 +50,7 @@ export default {
   },
   getAllCathedra: async (_: any, {page, itemsPerPage}: any, context: any) => {
     try {
-      const allCathedra = await Cathedra.findAll();
+      const allCathedra = await Cathedra.findAll({order: [["id", "DESC"]]});
       const allCathedraWithImg = await allCathedra.map(
         async (cathedra: any) => await addImageToCathedra(cathedra)
       );

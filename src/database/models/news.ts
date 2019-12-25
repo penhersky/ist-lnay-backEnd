@@ -5,6 +5,7 @@ export class News extends Sequelize.Model {
   public id!: number;
   public title!: string;
   public body!: string;
+  public video!: string;
   public author!: number;
   public views!: number;
   public group!: number;
@@ -33,6 +34,10 @@ const NewsModel = <NewsType>sequelize.define(
     body: {
       type: new Sequelize.DataTypes.STRING(4024),
       allowNull: false
+    },
+    video: {
+      type: new Sequelize.DataTypes.STRING(256),
+      allowNull: true
     },
     author: {
       type: new Sequelize.DataTypes.INTEGER(),

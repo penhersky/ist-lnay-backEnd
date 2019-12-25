@@ -11,7 +11,7 @@ export const typeNews = gql`
     cathedra: cathedra
     video: String
     images: [String]
-    filles: [String]
+    files: [String]
     createdAt: String!
     updatedAt: String!
   }
@@ -23,7 +23,7 @@ export const typeNews = gql`
     cathedra: ID
     video: String
     images: [String]
-    filles: [String]
+    files: [String]
     author: ID!
   }
 
@@ -40,10 +40,10 @@ export const typeNews = gql`
 export const newsQuery = gql`
   type queryNews {
     getNews(id: ID!): newsRes
-    getNewsByOwnerId(id: ID!, page: Int, itemsPerPage: Int): [news!]
-    getNewsByGroupId(id: ID!, page: Int, itemsPerPage: Int): [news!]
-    getNewsByCathedraId(id: ID!, page: Int, itemsPerPage: Int): [news!]
-    getAllNews(page: Int, itemsPerPage: Int): [news!]
+    getNewsByAuthorId(id: ID!, page: Int, itemsPerPage: Int): allNews
+    getNewsByGroupId(id: ID!, page: Int, itemsPerPage: Int): allNews
+    getNewsByCathedraId(id: ID!, page: Int, itemsPerPage: Int): allNews
+    getAllNews(page: Int, itemsPerPage: Int): allNews
   }
 `;
 

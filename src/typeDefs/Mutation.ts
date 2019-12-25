@@ -15,6 +15,6 @@ export default gql`
     Group: mutationGroup
     Cathedra: mutationCathedra
     File: mutationFile
-    News: queryNews
+    News: mutationNews
   }
 `;

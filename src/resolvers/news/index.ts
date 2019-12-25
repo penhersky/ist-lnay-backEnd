@@ -1,9 +1,17 @@
 import type from "./type";
+import queryNews from "./Query";
+import mutationNews from "./Mutation";
 
 export const NewsTypes = {
-  ...type
+  ...type,
+  queryNews,
+  mutationNews
 };
 
-export const NewsQuery = {};
+export const NewsQuery = {
+  News: queryNews.getNews
+};
 
-export const NewsMutation = {};
+export const NewsMutation = {
+  News: mutationNews.addNews
+};
