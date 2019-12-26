@@ -1,6 +1,7 @@
 import _ from "lodash";
 import {User, UserInformation} from "../.../../../../database/models";
 import pagination from "../../pagination";
+import log from "../../../lib/logger";
 
 export default {
   getUser: async (parent: any, args: any, context: any) => {
@@ -9,6 +10,7 @@ export default {
       if (!user) return {message: "user is not found"};
       return _.omit(user.dataValues, ["password"]);
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getUser"});
       return {error: "Server Error! Kod(111)"};
     }
   },
@@ -22,6 +24,7 @@ export default {
         users: returnPage.arr
       };
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getUsers"});
       return {error: "Server Error! Kod(112)"};
     }
   },
@@ -31,6 +34,7 @@ export default {
       if (!user) return {message: "user is not found"};
       return _.omit(user.dataValues, ["password"]);
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getUserByEmail"});
       return {error: "Server Error! Kod(113)"};
     }
   },
@@ -58,6 +62,7 @@ export default {
         users: returnPage.arr
       };
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getUsersByGroupID"});
       return {error: "Server Error! Kod(114)"};
     }
   },
@@ -83,6 +88,10 @@ export default {
         users: returnPage.arr
       };
     } catch (error) {
+      log.error(error.message, {
+        path: __filename,
+        object: "getUsersByCathedraID"
+      });
       return {error: "Server Error! Kod(115)"};
     }
   }

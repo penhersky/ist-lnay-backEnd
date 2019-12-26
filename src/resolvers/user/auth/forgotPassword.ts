@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 //import mail from "./_email";
 import {User} from "../../../database/models";
 import {validationEmail, passwordValidation} from "./_validationAuth";
-import {isDevelopment} from "../../../config";
+import log from "../../../lib/logger";
 
 export default {
   forgotPasswordStart: async (_: any, {email}: any) => {
@@ -20,7 +20,10 @@ export default {
         message: `Please go to your mail: ${email} and confirm registration!`
       };
     } catch (error) {
-      if (isDevelopment) console.log(error);
+      log.error(error.message, {
+        path: __filename,
+        object: "forgotPasswordStart"
+      });
       return {error: "Server error! Kod(004)"};
     }
   },
@@ -42,7 +45,10 @@ export default {
       });
       return {message: "Password change successful!"};
     } catch (error) {
-      if (isDevelopment) console.log(error);
+      log.error(error.message, {
+        path: __filename,
+        object: "forgotPasswordFinish"
+      });
       return {error: "Server error! Kod(005)"};
     }
   }

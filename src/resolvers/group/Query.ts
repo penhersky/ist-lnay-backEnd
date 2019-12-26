@@ -1,5 +1,6 @@
 import {Group} from "../../database/models";
 import pagination from "../pagination";
+import log from "../../lib/logger";
 
 export default {
   getGroup: async (_: any, {id}: any, context: any) => {
@@ -8,6 +9,7 @@ export default {
       if (!group) return {message: "Group is not found!"};
       return group;
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getGroup"});
       return {error: "Server Error! Kod(211)"};
     }
   },
@@ -29,6 +31,10 @@ export default {
         groups: returnPage.arr
       };
     } catch (error) {
+      log.error(error.message, {
+        path: __filename,
+        object: "getGroupByCathedraID"
+      });
       return {error: "Server Error! Kod(212)"};
     }
   },
@@ -43,6 +49,7 @@ export default {
         groups: returnPage.arr
       };
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getGroups"});
       return {error: "Server Error! Kod(213)"};
     }
   }

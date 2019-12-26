@@ -1,10 +1,12 @@
 import bcrypt from "bcryptjs";
+import _ from "lodash";
 
 import {User, UserInformation} from "../../../database/models";
 import userIdentity from "../auth/verification/userIdentity";
 import verifyToken from "../auth/verification/verifyToken";
 import {passwordValidation, validationUserData} from "../auth/_validationAuth";
 import verifyPosition from "../auth/verification/verifyPosition";
+import log from "../../../lib/logger";
 
 export default {
   changePassword: async (
@@ -49,10 +51,11 @@ export default {
       });
       return {message: "Password changed!"};
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "changePassword"});
       return {error: "Server Error! Kod(121)"};
     }
   },
-  updateUser: async (_: any, {id, input}: any, context: any) => {
+  updateUser: async (parent: any, {id, input}: any, context: any) => {
     try {
       const userAuthError = verifyToken(context);
       if (userAuthError) return {error: userAuthError, redirect: true};
@@ -82,16 +85,9 @@ export default {
         surname: input.surname,
         email: input.email
       });
-      return {
-        id: changedUser.id,
-        name: changedUser.name,
-        surname: changedUser.surname,
-        position: changedUser.position,
-        email: changedUser.email,
-        updatedAt: changedUser.updatedAt,
-        createdAt: changedUser.createdAt
-      };
+      return _.omit(changedUser, ["password"]);
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "updateUser"});
       return {error: "Server Error! Kod(122)"};
     }
   },
@@ -125,11 +121,12 @@ export default {
       });
       return {message: "The operation was successful!"};
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "changePosition"});
       return {error: "Server Error! Kod(123)"};
     }
   },
   updateAdditionalInformationByUserId: async (
-    _: any,
+    parent: any,
     {id, input}: any,
     context: any
   ) => {
@@ -147,30 +144,12 @@ export default {
       }
       const changedUserInformation = await User.findOne({where: {id}}); // ?
 
-      await changedUserInformation.update({
-        image: input.image,
-        group: input.group,
-        cathedra: input.cathedra,
-        faculty: input.faculty,
-        phonNumber: input.phonNumber,
-        studentNumber: input.studentNumber,
-        born: input.born,
-        residence: input.residence,
-        otherInformation: input.otherInformation
-      });
-      return {
-        id: changedUserInformation.id,
-        image: changedUserInformation.image,
-        group: changedUserInformation.group,
-        cathedra: changedUserInformation.cathedra,
-        faculty: changedUserInformation.faculty,
-        phonNumber: changedUserInformation.phonNumber,
-        studentNumber: changedUserInformation.studentNumber,
-        born: changedUserInformation.born,
-        residence: changedUserInformation.residence,
-        otherInformation: changedUserInformation.otherInformation
-      };
+      return await changedUserInformation.update(input);
     } catch (error) {
+      log.error(error.message, {
+        path: __filename,
+        object: "updateAdditionalInformationByUserId"
+      });
       return {error: "Server Error! Kod(124)"};
     }
   },
@@ -191,6 +170,10 @@ export default {
       await UserInformation.destroy({where: {owner: id}});
       return {error: "User deleted", redirect: +actualUser.id === +id};
     } catch (error) {
+      log.error(error.message, {
+        path: __filename,
+        object: "deleteUser"
+      });
       return {error: "Server Error! Kod(125)"};
     }
   }

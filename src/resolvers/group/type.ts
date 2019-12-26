@@ -1,4 +1,5 @@
 import {Cathedra, File, UserInformation, User} from "../../database/models";
+import log from "../../lib/logger";
 
 export default {
   group: {
@@ -6,6 +7,7 @@ export default {
       try {
         return await Cathedra.findOne({where: {id: parent.cathedra}});
       } catch (error) {
+        log.error(error.message, {path: __filename, object: "group"});
         return null;
       }
     },
@@ -13,6 +15,7 @@ export default {
       try {
         return await File.findAll({where: {owner: parent.id}});
       } catch (error) {
+        log.error(error.message, {path: __filename, object: "files"});
         return [];
       }
     },
@@ -25,6 +28,7 @@ export default {
           return await User.findOne({where: {id: userInformation.owner}});
         });
       } catch (error) {
+        log.error(error.message, {path: __filename, object: "people"});
         return null;
       }
     }

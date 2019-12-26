@@ -1,6 +1,7 @@
 import {Cathedra, User, Image} from "../../database/models";
 import verifyToken from "../user/auth/verification/verifyToken";
 import verifyPosition from "../user/auth/verification/verifyPosition";
+import log from "../../lib/logger";
 
 export default {
   addCathedra: async (_: any, {input}: any, context: any) => {
@@ -39,6 +40,7 @@ export default {
         updatedAt: newCathedra.updatedAt
       };
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "addCathedra"});
       return {error: "Server Error! Kod(321)"};
     }
   },
@@ -83,6 +85,7 @@ export default {
         updatedAt: cathedra.updatedAt
       };
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "updateCathedra"});
       return {error: "Server Error! Kod(322)"};
     }
   },
@@ -103,6 +106,7 @@ export default {
 
       return {message: "Cathedra deleted!"};
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "deleteCathedra"});
       return {error: "Server Error! Kod(322)"};
     }
   }

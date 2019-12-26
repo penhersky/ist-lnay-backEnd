@@ -1,5 +1,6 @@
 import _ from "lodash";
 import {Cathedra, Group, User, FileNews} from "../../database/models";
+import log from "../../lib/logger";
 
 export default {
   news: {
@@ -7,6 +8,7 @@ export default {
       try {
         return await User.findOne({where: {id: parent.author}});
       } catch (error) {
+        log.error(error.message, {path: __filename, object: "author"});
         return null;
       }
     },
@@ -14,6 +16,7 @@ export default {
       try {
         return await Group.findOne({where: {id: parent.group}});
       } catch (error) {
+        log.error(error.message, {path: __filename, object: "group"});
         return null;
       }
     },
@@ -21,6 +24,7 @@ export default {
       try {
         return await Cathedra.findOne({where: {id: parent.cathedra}});
       } catch (error) {
+        log.error(error.message, {path: __filename, object: "cathedra"});
         return null;
       }
     },
@@ -36,6 +40,7 @@ export default {
             .value()
         );
       } catch (error) {
+        log.error(error.message, {path: __filename, object: "images"});
         return [];
       }
     },
@@ -51,6 +56,7 @@ export default {
             .value()
         );
       } catch (error) {
+        log.error(error.message, {path: __filename, object: "files"});
         return [];
       }
     }

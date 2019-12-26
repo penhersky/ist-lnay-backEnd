@@ -1,6 +1,7 @@
 import {File, Group, User} from "../../database/models";
 import verifyToken from "../user/auth/verification/verifyToken";
 import verifyPosition from "../user/auth/verification/verifyPosition";
+import log from "../../lib/logger";
 
 export default {
   addFile: async (_: any, {input}: any, context: any) => {
@@ -20,6 +21,7 @@ export default {
         information: input.information
       });
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "addFile"});
       return {error: "Server Error! Kod(421)"};
     }
   },
@@ -43,6 +45,7 @@ export default {
         information: input.information
       });
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "updateFile"});
       return {error: "Server Error! Kod(422)"};
     }
   },
@@ -59,6 +62,7 @@ export default {
       await File.destroy({where: {id}});
       return {message: "File deleted!"};
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "deleteFile"});
       return {error: "Server Error! Kod(223)"};
     }
   }

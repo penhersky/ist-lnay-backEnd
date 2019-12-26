@@ -2,6 +2,7 @@ import {Group, User, File} from "../../database/models";
 import {groupInput} from "./_validationGroup";
 import verifyToken from "../user/auth/verification/verifyToken";
 import verifyPosition from "../user/auth/verification/verifyPosition";
+import log from "../../lib/logger";
 
 export default {
   addGroup: async (_: any, {input}: any, context: any) => {
@@ -30,6 +31,7 @@ export default {
 
       return newGroup;
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "addGroup"});
       return {error: "Server Error! Kod(221)"};
     }
   },
@@ -61,6 +63,7 @@ export default {
 
       return group;
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "updateGroup"});
       return {error: "Server Error! Kod(222)"};
     }
   },
@@ -77,6 +80,7 @@ export default {
       await File.destroy({where: {owner: id}});
       return {message: "Group deleted!"};
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "deleteGroup"});
       return {error: "Server Error! Kod(223)"};
     }
   }

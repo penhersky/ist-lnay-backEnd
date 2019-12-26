@@ -1,4 +1,5 @@
 import {User} from "../../database/models";
+import log from "../../lib/logger";
 
 export default {
   File: {
@@ -6,6 +7,7 @@ export default {
       try {
         return await User.findOne({where: {id: parent.owner}});
       } catch (error) {
+        log.error(error.message, {path: __filename, object: "File"});
         return {error: "Server Error! Kod(401)"};
       }
     }

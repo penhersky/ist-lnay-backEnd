@@ -3,6 +3,7 @@ import {FileNews, News, User} from "../../database/models";
 import verifyToken from "../user/auth/verification/verifyToken";
 import verifyPosition from "../user/auth/verification/verifyPosition";
 import {newsInput} from "./_validationNews";
+import log from "../../lib/logger";
 
 export default {
   addNews: async (parent: any, {input}: any, context: any) => {
@@ -44,6 +45,7 @@ export default {
 
       return news;
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "addNews"});
       return {error: "Server Error! Kod(531)"};
     }
   },
@@ -67,6 +69,7 @@ export default {
 
       return {message: "News Deleted!"};
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "deleteNews"});
       return {error: "Server Error! Kod(534)"};
     }
   }

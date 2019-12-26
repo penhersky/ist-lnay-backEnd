@@ -2,7 +2,8 @@ import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import {User} from "../../../database/models";
 import {loginValidation} from "./_validationAuth";
-import {isDevelopment, SECRET} from "../../../config";
+import {SECRET} from "../../../config";
+import log from "../../../lib/logger";
 
 export default async (_: any, {email, password}: any) => {
   try {
@@ -18,7 +19,10 @@ export default async (_: any, {email, password}: any) => {
     const token = jwt.sign({id: user.id, email}, SECRET);
     return {message: "Authorization was successful!", token};
   } catch (error) {
-    if (isDevelopment) console.log(error);
+    log.error(error.message, {
+      path: __filename,
+      object: "login"
+    });
     return {error: "Server error! Kod(003)"};
   }
 };

@@ -1,5 +1,6 @@
 import {News} from "../../database/models";
 import pagination from "../pagination";
+import log from "../../lib/logger";
 
 export default {
   getNews: async (_: any, {id}: any, context: any) => {
@@ -8,6 +9,7 @@ export default {
       await news.update({views: ++news.views});
       return news || {message: "News is not found!"};
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getNews"});
       return {error: "Server Error! Kod(521)"};
     }
   },
@@ -28,6 +30,7 @@ export default {
         groups: returnPage.arr
       };
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getNewsByAuthorId"});
       return {error: "Server Error! Kod(522)"};
     }
   },
@@ -48,6 +51,7 @@ export default {
         groups: returnPage.arr
       };
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getNewsByGroupId"});
       return {error: "Server Error! Kod(523)"};
     }
   },
@@ -68,6 +72,10 @@ export default {
         groups: returnPage.arr
       };
     } catch (error) {
+      log.error(error.message, {
+        path: __filename,
+        object: "getNewsByCathedraId"
+      });
       return {error: "Server Error! Kod(523)"};
     }
   },
@@ -81,6 +89,7 @@ export default {
         groups: returnPage.arr
       };
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getAllNews"});
       return {error: "Server Error! Kod(525)"};
     }
   }

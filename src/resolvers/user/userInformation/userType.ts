@@ -1,4 +1,5 @@
 import {Group, Cathedra, UserInformation} from "../../../database/models";
+import log from "../../../lib/logger";
 
 export const additionalInformationUser = {
   group: {
@@ -6,6 +7,7 @@ export const additionalInformationUser = {
       try {
         return await Group.findOne({where: {id: parent.group}});
       } catch (error) {
+        log.error(error.message, {path: __filename, object: "group"});
         return {error: "Server Error! Kod(101)"};
       }
     }
@@ -14,6 +16,7 @@ export const additionalInformationUser = {
     try {
       return await Cathedra.findOne({where: {id: parent.cathedra}});
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "cathedra"});
       return {error: "Server Error! Kod(102)"};
     }
   }
@@ -26,6 +29,10 @@ export const user = {
         where: {id: parent.id}
       });
     } catch (error) {
+      log.error(error.message, {
+        path: __filename,
+        object: "additionalInformationUser"
+      });
       return {error: "Server Error! Kod(103)"};
     }
   }

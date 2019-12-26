@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import PATH from "path";
 import {Dialect} from "sequelize";
+import {LogLevelString} from "bunyan";
 
 const root: Function = PATH.join.bind(this, __dirname, "../");
 dotenv.config({path: root(".env")});
@@ -11,6 +12,8 @@ export const port: number | undefined = Number(process.env.port);
 
 export const SECRET: string = String(process.env.SECRET);
 export const DATABASE: string | undefined = process.env.DATABASE;
+export const NODE_LOGGING_LEVEL: LogLevelString =
+  <LogLevelString>process.env.NODE_LOGGING_LEVEL || "info";
 export const USER_NAME: string | undefined = process.env.USER_NAME;
 export const PASSWORD: string | undefined = process.env.PASSWORD;
 export const HOST_DB: string | undefined = process.env.HOST_DB;

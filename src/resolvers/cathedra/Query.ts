@@ -1,5 +1,6 @@
 import {Cathedra} from "../../database/models";
 import pagination from "../pagination";
+import log from "../../lib/logger";
 
 export default {
   getCathedra: async (_: any, {id}: any, context: any) => {
@@ -8,6 +9,7 @@ export default {
       if (!cathedra) return {error: "Cathedra is not found!"};
       return await cathedra;
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getCathedra"});
       return {error: "Server Error! Kod(311)"};
     }
   },
@@ -30,6 +32,10 @@ export default {
         groups: returnPage.arr
       };
     } catch (error) {
+      log.error(error.message, {
+        path: __filename,
+        object: "addCathedraByFaculty"
+      });
       return {error: "Server Error! Kod(312)"};
     }
   },
@@ -45,6 +51,7 @@ export default {
         groups: returnPage.arr
       };
     } catch (error) {
+      log.error(error.message, {path: __filename, object: "getAllCathedra"});
       return {error: "Server Error! Kod(312)"};
     }
   }

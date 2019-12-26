@@ -2,7 +2,7 @@ import bcryptjs from "bcryptjs";
 import {passwordValidation, validationUserData} from "./_validationAuth";
 //import Email from "./email";
 import {User, UserInformation} from "../../../database/models";
-import {isDevelopment} from "../../../config";
+import log from "../../../lib/logger";
 
 export default {
   startRegister: async (_: any, {name, surname, email, platform}: any) => {
@@ -39,7 +39,10 @@ export default {
         message: `Please go to your mail: ${email} and confirm registration!`
       };
     } catch (error) {
-      if (isDevelopment) console.log(error);
+      log.error(error.message, {
+        path: __filename,
+        object: "startRegistration"
+      });
       return {error: "Server error! Kod(001)"};
     }
   },
@@ -67,7 +70,10 @@ export default {
       });
       return {message: "Registration was successful!"};
     } catch (error) {
-      if (isDevelopment) console.log(error);
+      log.error(error.message, {
+        path: __filename,
+        object: "finishRegistration"
+      });
       return {error: "Server error! Kod(002)"};
     }
   }
