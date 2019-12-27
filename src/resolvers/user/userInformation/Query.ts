@@ -14,14 +14,14 @@ export default {
       return {error: "Server Error! Kod(111)"};
     }
   },
-  getUsers: async (_: any, {page, itemsPerPage}: any, context: any) => {
+  getUsers: async (parent: any, {page, itemsPerPage}: any, context: any) => {
     try {
       const users = await User.findAll({order: [["id", "DESC"]]});
       const returnPage = pagination(users, page, itemsPerPage);
       return {
         countPage: returnPage.count,
         currentPage: returnPage.count ? page : undefined,
-        users: returnPage.arr
+        users: _.filter(returnPage.arr, (user: any) => user.confirmed)
       };
     } catch (error) {
       log.error(error.message, {path: __filename, object: "getUsers"});
@@ -59,7 +59,7 @@ export default {
       return {
         countPage: returnPage.count,
         currentPage: returnPage.count ? page : undefined,
-        users: returnPage.arr
+        users: _.filter(returnPage.arr, (user: any) => user.confirmed)
       };
     } catch (error) {
       log.error(error.message, {path: __filename, object: "getUsersByGroupID"});
@@ -85,7 +85,7 @@ export default {
       return {
         countPage: returnPage.count,
         currentPage: returnPage.count ? page : undefined,
-        users: returnPage.arr
+        users: _.filter(returnPage.arr, (user: any) => user.confirmed)
       };
     } catch (error) {
       log.error(error.message, {

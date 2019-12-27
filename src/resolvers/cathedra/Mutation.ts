@@ -2,6 +2,7 @@ import {Cathedra, User, Image} from "../../database/models";
 import verifyToken from "../user/auth/verification/verifyToken";
 import verifyPosition from "../user/auth/verification/verifyPosition";
 import log from "../../lib/logger";
+import {updateArr} from "../../lib/_updateDataFromInput";
 
 export default {
   addCathedra: async (_: any, {input}: any, context: any) => {
@@ -19,7 +20,8 @@ export default {
       const newCathedra = await Cathedra.create({
         name: input.name,
         faculty: input.faculty,
-        information: input.information
+        information: input.information,
+        mainImage: input.mainImage
       });
       if (input.images) {
         await input.image.map(async (image: string) => {
@@ -30,15 +32,7 @@ export default {
         });
       }
 
-      return {
-        id: newCathedra.id,
-        name: newCathedra.name,
-        faculty: newCathedra.faculty,
-        information: newCathedra.information,
-        Images: input.Images,
-        createdAt: newCathedra.createdAt,
-        updatedAt: newCathedra.updatedAt
-      };
+      return newCathedra;
     } catch (error) {
       log.error(error.message, {path: __filename, object: "addCathedra"});
       return {error: "Server Error! Kod(321)"};
@@ -59,31 +53,33 @@ export default {
       const cathedra = await Cathedra.findOne({where: {id}});
       if (!cathedra) return {error: "Cathedra is not found!"};
 
-      cathedra.update({
+      const updatedCathedra = cathedra.update({
         name: input.name,
         faculty: input.faculty,
+        mainImage: input.mainImage,
         information: input.information
       });
-      if (input.images) {
-        await input.image.map(async (image: string) => {
-          await Image.findOrCreate({
-            where: {path: image, owner: cathedra.id},
-            defaults: {
-              path: image,
-              owner: cathedra.id
-            }
-          });
-        });
+
+      const oldImages = await Image.findAll({where: {owner: cathedra.id}});
+      const resultImages = updateArr(oldImages, input.images);
+
+      if (resultImages) {
+        if (resultImages.deleteArr) {
+          resultImages.deleteArr.map(
+            async (image: any) =>
+              await Image.destroy({
+                where: {id: image.id}
+              })
+          );
+        }
+        if (resultImages.saveArr) {
+          resultImages.saveArr.map(
+            async (image: any) =>
+              await Image.create({path: image, owner: user.id})
+          );
+        }
       }
-      return {
-        id: cathedra.id,
-        name: cathedra.name,
-        faculty: cathedra.faculty,
-        information: cathedra.information,
-        Images: input.Images,
-        createdAt: cathedra.createdAt,
-        updatedAt: cathedra.updatedAt
-      };
+      return updatedCathedra;
     } catch (error) {
       log.error(error.message, {path: __filename, object: "updateCathedra"});
       return {error: "Server Error! Kod(322)"};

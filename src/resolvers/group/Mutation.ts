@@ -25,7 +25,7 @@ export default {
       const newGroup = await Group.create({
         name: input.name,
         cathedra: input.cathedra,
-        image: input.image,
+        mainImage: input.mainImage,
         information: input.information
       });
 
@@ -57,7 +57,7 @@ export default {
       group.update({
         name: input.name,
         cathedra: input.cathedra,
-        image: input.image,
+        mainImage: input.mainImage,
         information: input.information
       });
 

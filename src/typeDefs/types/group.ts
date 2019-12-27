@@ -7,7 +7,7 @@ export const typeGroup = gql`
     cathedra: cathedra!
     information: String
     fails: [File]
-    image: String
+    mainImage: String
     people: [user!]
     createdAt: String!
     updatedAt: String!
@@ -17,7 +17,7 @@ export const typeGroup = gql`
     name: String!
     cathedra: ID!
     information: String
-    image: String
+    mainImage: String
   }
 
   type groups {

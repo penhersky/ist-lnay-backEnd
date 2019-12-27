@@ -6,6 +6,7 @@ export const typeCathedra = gql`
     name: String!
     faculty: String!
     information: String
+    mainImage: String
     images: [String]
     createdAt: String!
     updatedAt: String!
@@ -15,6 +16,7 @@ export const typeCathedra = gql`
     name: String!
     faculty: String!
     information: String
+    mainImage: String
     images: [String]
   }
 

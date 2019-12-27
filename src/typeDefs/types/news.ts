@@ -24,7 +24,6 @@ export const typeNews = gql`
     video: String
     images: [String]
     files: [String]
-    author: ID!
   }
 
   type allNews {

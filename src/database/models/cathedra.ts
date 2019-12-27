@@ -5,6 +5,7 @@ export class Cathedra extends Sequelize.Model {
   public id!: number;
   public name!: string;
   public faculty!: string;
+  public mainImage!: string;
   public information!: string;
 
   public readonly createdAt!: Date;
@@ -28,6 +29,10 @@ const CathedraModel = <CathedraType>sequelize.define(
     },
     faculty: {
       type: new Sequelize.DataTypes.STRING(128),
+      allowNull: true
+    },
+    mainImage: {
+      type: new Sequelize.DataTypes.STRING(256),
       allowNull: true
     },
     information: {

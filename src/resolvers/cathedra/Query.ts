@@ -7,7 +7,7 @@ export default {
     try {
       const cathedra = await Cathedra.findOne({where: {id}});
       if (!cathedra) return {error: "Cathedra is not found!"};
-      return await cathedra;
+      return cathedra;
     } catch (error) {
       log.error(error.message, {path: __filename, object: "getCathedra"});
       return {error: "Server Error! Kod(311)"};

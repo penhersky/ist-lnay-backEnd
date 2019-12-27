@@ -5,6 +5,7 @@ export class Group extends Sequelize.Model {
   public id!: number;
   public name!: string;
   public cathedra!: string;
+  public mainImage!: string;
   public information!: string;
 
   public readonly createdAt!: Date;
@@ -30,12 +31,12 @@ const GroupModel = <GroupType>sequelize.define(
       type: new Sequelize.DataTypes.INTEGER(),
       allowNull: false
     },
-    information: {
-      type: new Sequelize.DataTypes.STRING(4024),
+    mainImage: {
+      type: new Sequelize.DataTypes.STRING(256),
       allowNull: true
     },
-    image: {
-      type: new Sequelize.DataTypes.STRING(256),
+    information: {
+      type: new Sequelize.DataTypes.STRING(4024),
       allowNull: true
     }
   },

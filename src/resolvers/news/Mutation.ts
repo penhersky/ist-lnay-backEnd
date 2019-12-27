@@ -4,6 +4,7 @@ import verifyToken from "../user/auth/verification/verifyToken";
 import verifyPosition from "../user/auth/verification/verifyPosition";
 import {newsInput} from "./_validationNews";
 import log from "../../lib/logger";
+import {updateArr} from "../../lib/_updateDataFromInput";
 
 export default {
   addNews: async (parent: any, {input}: any, context: any) => {
@@ -19,13 +20,12 @@ export default {
       const newsToSave = _.pick(input, [
         "title",
         "body",
-        "author",
         "group",
         "cathedra",
         "video"
       ]);
 
-      const validationError = await newsInput(newsToSave);
+      const validationError = await newsInput({...newsToSave, author: user.id});
       if (validationError) return {error: validationError};
 
       const news = await News.create(newsToSave);
@@ -47,6 +47,79 @@ export default {
     } catch (error) {
       log.error(error.message, {path: __filename, object: "addNews"});
       return {error: "Server Error! Kod(531)"};
+    }
+  },
+  updateNews: async (parent: any, {id, input}: any, context: any) => {
+    try {
+      const authError = verifyToken(context);
+      if (authError) return {error: authError, redirect: true};
+      const user = await User.findOne({
+        where: {id: context.res.locals.user.id}
+      });
+      const news = await News.findOne({where: {id}});
+      if (!news) return {error: "News is not Found!"};
+
+      if (news.author !== user.id) {
+        if (!verifyPosition(user.position, "admin"))
+          return {error: "You do not have access to this action!"};
+      }
+
+      const newsForChange = _.pick(input, [
+        "title",
+        "body",
+        "group",
+        "cathedra",
+        "video"
+      ]);
+      const updatedNews = await news.update(newsForChange);
+
+      const oldFiles = await FileNews.findAll({
+        where: {news: news.id, type: "file"}
+      });
+      const oldImage = await FileNews.findAll({
+        where: {news: news.id, type: "image"}
+      });
+
+      const resultImages = updateArr(oldImage, input.images);
+      if (resultImages) {
+        if (resultImages.deleteArr) {
+          resultImages.deleteArr.map(
+            async (image: any) =>
+              await FileNews.destroy({
+                where: {news: news.id, type: "image", path: image}
+              })
+          );
+        }
+        if (resultImages.saveArr) {
+          resultImages.saveArr.map(
+            async (image: any) =>
+              await FileNews.create({type: "image", path: image, news: news.id})
+          );
+        }
+      }
+
+      const resultFiles = updateArr(oldFiles, input.files);
+      if (resultFiles) {
+        if (resultFiles.deleteArr) {
+          resultFiles.deleteArr.map(
+            async (file: any) =>
+              await FileNews.destroy({
+                where: {news: news.id, type: "file", path: file}
+              })
+          );
+        }
+        if (resultFiles.saveArr) {
+          resultFiles.saveArr.map(
+            async (file: any) =>
+              await FileNews.create({type: "file", path: file, news: news.id})
+          );
+        }
+      }
+
+      return updatedNews;
+    } catch (error) {
+      log.error(error.message, {path: __filename, object: "updateNews"});
+      return {error: "Server Error! Kod(532)"};
     }
   },
   deleteNews: async (parent: any, {id}: any, context: any) => {
