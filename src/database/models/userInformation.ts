@@ -45,7 +45,7 @@ const UserInformationModel = <UserType>sequelize.define(
       allowNull: true
     },
     phonNumber: {
-      type: Sequelize.DataTypes.STRING(13),
+      type: new Sequelize.DataTypes.STRING(13),
       allowNull: true
     },
     studentNumber: {

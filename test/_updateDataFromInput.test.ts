@@ -5,7 +5,7 @@ import _ from "lodash";
 const should: Chai.Should = chai.should();
 import {updateArr} from "../src/lib/_updateDataFromInput";
 
-describe.only("# Update data from input", () => {
+describe("# Update data from input", () => {
   it("1. Update arr [1, 2, 3, 4], [3, 4, 5]", () => {
     const result = updateArr([1, 2, 3, 4], [3, 4, 5]);
     _.isEqual(result?.saveArr, [5]).should.be.true;
