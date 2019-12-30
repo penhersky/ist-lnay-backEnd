@@ -9,6 +9,9 @@ export default gql`
   type LoginResult {
     message: String
     error: String
-    token: String
+    mainToken: String
+    weeklyToken: String
+    dayToken: String
+    user: user
   }
 `;
