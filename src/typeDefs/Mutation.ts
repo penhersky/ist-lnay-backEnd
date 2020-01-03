@@ -6,9 +6,10 @@ export default gql`
       name: String!
       surname: String!
       email: String!
+      password: String!
       platform: String
     ): result
-    finishRegister(id: Int!, password: String!): result
+    finishRegister(id: Int!): result
     forgotPasswordFinish(id: Int, newPassword: String!): result
 
     User: userMutation

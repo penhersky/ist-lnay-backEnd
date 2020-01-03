@@ -5,14 +5,21 @@ import {User, UserInformation} from "../../../database/models";
 import log from "../../../lib/logger";
 
 export default {
-  startRegister: async (_: any, {name, surname, email, platform}: any) => {
+  startRegister: async (
+    _: any,
+    {name, surname, email, platform, password}: any
+  ) => {
     try {
       const validationError = await validationUserData({
         name,
         surname,
         email
       });
+      const validationPasswordError = await passwordValidation({
+        password
+      });
       if (validationError) return {error: validationError};
+      if (validationPasswordError) return {error: validationError};
 
       const UserCheckEmail = await User.findOne({where: {email}});
       if (UserCheckEmail) {
@@ -27,16 +34,20 @@ export default {
         }
       }
 
+      const salt = await bcryptjs.genSalt(10);
+      const hashPassword = await bcryptjs.hash(password, salt);
+
       await User.create({
         name,
         surname,
-        email
+        email,
+        password: hashPassword
       });
 
       // send letter
 
       return {
-        message: `Please go to your mail: ${email} and confirm registration!`
+        message: `Перейдіть на електронну пошту: ${email} та підтвердьте реєстрацію!`
       };
     } catch (error) {
       log.error(error.message, {
@@ -47,24 +58,11 @@ export default {
     }
   },
 
-  finishRegister: async (_: any, {id, password}: any) => {
+  finishRegister: async (_: any, {id}: any) => {
     try {
-      const validationError = await passwordValidation({
-        password
-      });
-      if (validationError) return {error: validationError};
-
       const user = await User.findOne({where: {id}});
       if (!user || user.confirmed)
         return {error: "This feature is not available!"};
-
-      const salt = await bcryptjs.genSalt(10);
-      const hashPassword = await bcryptjs.hash(password, salt);
-
-      await user.update({
-        confirmed: true,
-        password: hashPassword
-      });
       await UserInformation.create({
         owner: user.id
       });
