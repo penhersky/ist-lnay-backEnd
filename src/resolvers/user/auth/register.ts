@@ -7,7 +7,8 @@ import log from "../../../lib/logger";
 export default {
   startRegister: async (
     _: any,
-    {name, surname, email, platform, password}: any
+    {name, surname, email, platform, password}: any,
+    context: any
   ) => {
     try {
       const validationError = await validationUserData({
@@ -37,12 +38,21 @@ export default {
       const salt = await bcryptjs.genSalt(10);
       const hashPassword = await bcryptjs.hash(password, salt);
 
-      await User.create({
+      const user = await User.create({
         name,
         surname,
         email,
         password: hashPassword
       });
+
+      const searchParams = new URLSearchParams("");
+      searchParams.append("id", user.id);
+      const key = await bcryptjs.hash(user.email, salt);
+      searchParams.append("id", user.id);
+      searchParams.append("key", key);
+      const letterLink = `${
+        context.req.headers.origin
+      }/api/finishRegistration/${searchParams.toString()}`;
 
       // send letter
 
@@ -58,15 +68,23 @@ export default {
     }
   },
 
-  finishRegister: async (_: any, {id}: any) => {
+  finishRegister: async (_: any, {id, key}: any) => {
     try {
       const user = await User.findOne({where: {id}});
-      if (!user || user.confirmed)
-        return {error: "This feature is not available!"};
-      await UserInformation.create({
-        owner: user.id
-      });
-      return {message: "Registration was successful!"};
+      const verifyKey = await bcryptjs.compare(user.email, key);
+      if (verifyKey) {
+        if (!user || user.confirmed)
+          return {error: "Профіль користувача уже підтверджений! "};
+
+        user.update({
+          confirmed: true
+        });
+        await UserInformation.create({
+          owner: user.id
+        });
+        return {message: "Реєстрація пройшла успішно!"};
+      }
+      return {error: "Термін дії ключа вийшов!"};
     } catch (error) {
       log.error(error.message, {
         path: __filename,

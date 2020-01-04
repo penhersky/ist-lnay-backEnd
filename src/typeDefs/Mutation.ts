@@ -9,8 +9,8 @@ export default gql`
       password: String!
       platform: String
     ): result
-    finishRegister(id: Int!): result
-    forgotPasswordFinish(id: Int, newPassword: String!): result
+    finishRegister(id: Int!, key: String!): result
+    forgotPasswordFinish(id: Int, key: String!, newPassword: String!): result
 
     User: userMutation
     Group: mutationGroup
