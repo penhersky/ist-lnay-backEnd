@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import {SECRET, isDevelopment} from "../../../../config";
+import {SECRET} from "../../../../config";
 
-const verifyToken = (context: any): String | undefined => {
+const verifyToken = (context: any): string | undefined => {
   const token: string | undefined = context.req.header("auth-token");
   if (!token) {
     return "Access Denied!";
@@ -14,7 +14,6 @@ const verifyToken = (context: any): String | undefined => {
     };
     return undefined;
   } catch (error) {
-    if (isDevelopment) console.error(error);
     return "Invalid Token!";
   }
 };

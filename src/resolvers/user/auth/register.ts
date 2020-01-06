@@ -2,6 +2,7 @@ import bcryptjs from "bcryptjs";
 import {passwordValidation, validationUserData} from "./_validationAuth";
 //import Email from "./email";
 import {User, UserInformation} from "../../../database/models";
+import {createURL, verifyKey} from "../../../lib/email/urlForMail";
 import log from "../../../lib/logger";
 
 export default {
@@ -16,23 +17,33 @@ export default {
         surname,
         email
       });
+      if (validationError) return {error: validationError};
+
       const validationPasswordError = await passwordValidation({
         password
       });
-      if (validationError) return {error: validationError};
-      if (validationPasswordError) return {error: validationError};
+      if (validationPasswordError) return {error: validationPasswordError};
 
       const UserCheckEmail = await User.findOne({where: {email}});
       if (UserCheckEmail) {
-        if (!UserCheckEmail.confirmed) {
+        if (UserCheckEmail.confirmed) {
           return {
-            message: `Please go to your mail: ${email} and confirm registration!`
-          };
-        } else {
-          return {
-            error: `"email" already exists!`
+            error:
+              '"email"Користувач з даною електронною поштою уже підтвердив свій обліковий запис'
           };
         }
+
+        const url = createURL(
+          UserCheckEmail.id,
+          email,
+          "/api/finishRegistration",
+          context
+        );
+        console.log(url);
+        // send letter
+        return {
+          message: `Лист повторно відправлено! "${UserCheckEmail.email}"`
+        };
       }
 
       const salt = await bcryptjs.genSalt(10);
@@ -45,19 +56,12 @@ export default {
         password: hashPassword
       });
 
-      const searchParams = new URLSearchParams("");
-      searchParams.append("id", user.id);
-      const key = await bcryptjs.hash(user.email, salt);
-      searchParams.append("id", user.id);
-      searchParams.append("key", key);
-      const letterLink = `${
-        context.req.headers.origin
-      }/api/finishRegistration/${searchParams.toString()}`;
+      const url = createURL(user.id, email, "/api/finishRegistration", context);
 
       // send letter
 
       return {
-        message: `Перейдіть на електронну пошту: ${email} та підтвердьте реєстрацію!`
+        message: `Перейдіть на електронну пошту: ${email} та підтвердіте реєстрацію!`
       };
     } catch (error) {
       log.error(error.message, {
@@ -68,11 +72,13 @@ export default {
     }
   },
 
-  finishRegister: async (_: any, {id, key}: any) => {
+  finishRegister: async (_: any, {key}: any) => {
     try {
-      const user = await User.findOne({where: {id}});
-      const verifyKey = await bcryptjs.compare(user.email, key);
-      if (verifyKey) {
+      const keyResult = verifyKey(key);
+      if (!keyResult) return {error: "Термін дії ключа вийшов!"};
+
+      const user = await User.findOne({where: {id: keyResult.id}});
+      if (keyResult.email == user.email) {
         if (!user || user.confirmed)
           return {error: "Профіль користувача уже підтверджений! "};
 

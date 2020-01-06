@@ -12,13 +12,12 @@ export default async (paent: any, {email, password}: any) => {
     if (validationError) return {error: validationError};
 
     const user = await User.findOne({where: {email}});
-    if (!user) return {error: "User is not found!"};
+    if (!user) return {error: ' "email" Користувача не знайдено!'};
 
-    if (!user.confirmed)
-      return {error: "You have not completed your registration!"};
+    if (!user.confirmed) return {error: ' "email" Ви не завершили реєстрацію!'};
 
     const validPassword = await bcryptjs.compare(password, user.password);
-    if (!validPassword) return {error: "Invalid password!"};
+    if (!validPassword) return {error: ' "password" Неправильний пароль!'};
 
     const mainToken = jwt.sign({id: user.id, email}, SECRET, <any>{
       expiresIn: "31d"
@@ -31,7 +30,7 @@ export default async (paent: any, {email, password}: any) => {
     });
 
     return {
-      message: "Authorization was successful!",
+      message: "Авторизація пройшла успішно!",
       mainToken,
       weeklyToken,
       dayToken,

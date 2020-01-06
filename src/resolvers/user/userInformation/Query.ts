@@ -2,8 +2,24 @@ import _ from "lodash";
 import {User, UserInformation} from "../.../../../../database/models";
 import pagination from "../../pagination";
 import log from "../../../lib/logger";
+import verifyToken from "../auth/verification/verifyToken";
 
 export default {
+  getAuthorizedUser: async (parent: any, args: any, context: any) => {
+    try {
+      const userAuthError = verifyToken(context);
+      if (userAuthError) return {error: userAuthError, redirect: true};
+
+      const user = await User.findOne({
+        where: {id: context.res.locals.user.id}
+      });
+      if (!user) return {message: "user is not found"};
+      return _.omit(user.dataValues, ["password"]);
+    } catch (error) {
+      log.error(error.message, {path: __filename, object: "getUser"});
+      return {error: "Server Error! Kod(111)"};
+    }
+  },
   getUser: async (parent: any, args: any, context: any) => {
     try {
       const user = await User.findOne({where: {id: args.id}});

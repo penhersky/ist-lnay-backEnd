@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 //import mail from "./_email";
 import {User} from "../../../database/models";
 import {validationEmail, passwordValidation} from "./_validationAuth";
+import {verifyKey, createURL} from "../../../lib/email/urlForMail";
 import log from "../../../lib/logger";
 
 export default {
@@ -12,23 +13,19 @@ export default {
 
       const user = await User.findOne({where: {email}});
       if (!user || !user.confirmed)
-        return {error: "User does not exist or is not verified!"};
+        return {error: "Користувача не існує або не підтверджений!"};
 
-      const salt = await bcrypt.genSalt(10);
-      const searchParams = new URLSearchParams("");
-      searchParams.append("id", user.id);
-      const key = await bcrypt.hash(user.email, salt);
-      searchParams.append("id", user.id);
-      searchParams.append("key", key);
-
-      const letterLink = `${
-        context.req.headers.origin
-      }/api/finishRegistration/${searchParams.toString()}`;
+      const url = createURL(
+        user.id,
+        email,
+        "/api/forgotPasswordFinish",
+        context
+      );
 
       // send letter
 
       return {
-        message: `Please go to your mail: ${email} and confirm registration!`
+        message: `Перейдіть на електронну пошту: ${email} та активуйте створення нового паролю.`
       };
     } catch (error) {
       log.error(error.message, {
@@ -38,26 +35,27 @@ export default {
       return {error: "Server error! Kod(004)"};
     }
   },
-  forgotPasswordFinish: async (_: any, {id, key, newPassword}: any) => {
+  forgotPasswordFinish: async (_: any, {key, newPassword}: any) => {
     try {
+      const keyResult = verifyKey(key);
+      if (!keyResult) return {error: "Термін дії ключа вийшов!"};
+
       const validationError = await passwordValidation({password: newPassword});
       if (validationError) return {error: validationError};
 
-      const user = await User.findByPk(id);
-      if (!user) return {error: "User is not found!"};
-
-      const verifyKey = await bcrypt.compare(user.email, key);
-      if (!verifyKey) return {error: "Key is incorrect!"};
+      const user = await User.findByPk(keyResult.id);
+      if (!user) return {error: "Користувача не знайдено!"};
 
       const comparedPassword = await bcrypt.compare(newPassword, user.password);
-      if (comparedPassword) return {error: "Passwords should not be the same!"};
+      if (comparedPassword)
+        return {error: "Паролі не повинні бути однаковими!"};
 
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(newPassword, salt);
       await user.update({
         password: hashPassword
       });
-      return {message: "Password change successful!"};
+      return {message: "Пароль успішно змінено!"};
     } catch (error) {
       log.error(error.message, {
         path: __filename,
