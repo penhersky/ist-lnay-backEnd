@@ -53,7 +53,8 @@ export default {
         name,
         surname,
         email,
-        password: hashPassword
+        password: hashPassword,
+        position: "user"
       });
 
       const url = createURL(user.id, email, "/api/finishRegistration", context);

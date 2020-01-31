@@ -23,7 +23,7 @@ export const UserTypes = {
 };
 
 export const UserQuery = {
-  User: userQuery.getUser,
+  User: userQuery.getAuthorizedUser,
   login,
   forgotPasswordStart: forgotPassword.forgotPasswordStart
 };

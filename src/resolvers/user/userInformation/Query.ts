@@ -9,14 +9,13 @@ export default {
     try {
       const userAuthError = verifyToken(context);
       if (userAuthError) return {error: userAuthError, redirect: true};
-
       const user = await User.findOne({
         where: {id: context.res.locals.user.id}
       });
       if (!user) return {message: "user is not found"};
       return _.omit(user.dataValues, ["password"]);
     } catch (error) {
-      log.error(error.message, {path: __filename, object: "getUser"});
+      log.error(error.message, {path: __filename, object: "getAuthorizedUser"});
       return {error: "Server Error! Kod(111)"};
     }
   },
