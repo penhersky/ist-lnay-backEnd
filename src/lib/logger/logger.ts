@@ -12,7 +12,7 @@ const log = bunyan.createLogger({
     },
     {
       level: NODE_LOGGING_LEVEL,
-      path: path.resolve(__dirname, '..', '..', 'logError.json'),
+      path: path.resolve(__dirname, '..', '..', '..', 'logError.json'),
     },
   ],
 });
