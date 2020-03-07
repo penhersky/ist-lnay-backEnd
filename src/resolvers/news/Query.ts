@@ -1,6 +1,6 @@
 import { News } from '../../database/models';
 import pagination from '../pagination';
-import log from '../../lib/logger/logger';
+import { serverError } from '../../lib/logger';
 
 export default {
   getNews: async (_: any, { id }: any, context: any) => {
@@ -9,8 +9,7 @@ export default {
       await news.update({ views: ++news.views });
       return news || { message: 'News is not found!' };
     } catch (error) {
-      log.error(error.message, { path: __filename, object: 'getNews' });
-      return { error: 'Server Error! Kod(521)' };
+      return serverError(error.message, __dirname, 'getNews');
     }
   },
   getNewsByAuthorId: async (
@@ -30,11 +29,7 @@ export default {
         groups: returnPage.arr,
       };
     } catch (error) {
-      log.error(error.message, {
-        path: __filename,
-        object: 'getNewsByAuthorId',
-      });
-      return { error: 'Server Error! Kod(522)' };
+      return serverError(error.message, __dirname, 'getNewsByAuthorId');
     }
   },
   getNewsByGroupId: async (
@@ -54,11 +49,7 @@ export default {
         groups: returnPage.arr,
       };
     } catch (error) {
-      log.error(error.message, {
-        path: __filename,
-        object: 'getNewsByGroupId',
-      });
-      return { error: 'Server Error! Kod(523)' };
+      return serverError(error.message, __dirname, 'getNewsByGroupId');
     }
   },
   getNewsByCathedraId: async (
@@ -78,11 +69,7 @@ export default {
         groups: returnPage.arr,
       };
     } catch (error) {
-      log.error(error.message, {
-        path: __filename,
-        object: 'getNewsByCathedraId',
-      });
-      return { error: 'Server Error! Kod(523)' };
+      return serverError(error.message, __dirname, 'getNewsByCathedraId');
     }
   },
   getAllNews: async (_: any, { page, itemsPerPage }: any, context: any) => {
@@ -95,8 +82,7 @@ export default {
         groups: returnPage.arr,
       };
     } catch (error) {
-      log.error(error.message, { path: __filename, object: 'getAllNews' });
-      return { error: 'Server Error! Kod(525)' };
+      return serverError(error.message, __dirname, 'getAllNews');
     }
   },
 };

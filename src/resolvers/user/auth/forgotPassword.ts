@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { User } from '../../../database/models';
 import { validationEmail, passwordValidation } from './_validationAuth';
 import { verifyKey, createURL } from '../../../lib/email/urlForMail';
-import log from '../../../lib/logger/logger';
+import { serverError } from '../../../lib/logger';
 
 export default {
   forgotPasswordStart: async (_: any, { email }: any, context: any) => {
@@ -28,11 +28,7 @@ export default {
         message: `Перейдіть на електронну пошту: ${email} та активуйте створення нового паролю.`,
       };
     } catch (error) {
-      log.error(error.message, {
-        path: __filename,
-        object: 'forgotPasswordStart',
-      });
-      return { error: 'Server error! Kod(004)' };
+      return serverError(error.message, __dirname, 'forgotPasswordStart');
     }
   },
   forgotPasswordFinish: async (_: any, { key, newPassword }: any) => {
@@ -59,11 +55,7 @@ export default {
       });
       return { message: 'Пароль успішно змінено!' };
     } catch (error) {
-      log.error(error.message, {
-        path: __filename,
-        object: 'forgotPasswordFinish',
-      });
-      return { error: 'Server error! Kod(005)' };
+      return serverError(error.message, __dirname, 'forgotPasswordFinish');
     }
   },
 };

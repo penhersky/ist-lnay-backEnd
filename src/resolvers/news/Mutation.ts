@@ -3,7 +3,7 @@ import { FileNews, News, User } from '../../database/models';
 import verifyToken from '../user/auth/verification/verifyToken';
 import verifyPosition from '../user/auth/verification/verifyPosition';
 import { newsInput } from './_validationNews';
-import log from '../../lib/logger/logger';
+import { serverError } from '../../lib/logger';
 import { updateArr } from '../../lib/_updateDataFromInput';
 
 export default {
@@ -52,8 +52,7 @@ export default {
 
       return news;
     } catch (error) {
-      log.error(error.message, { path: __filename, object: 'addNews' });
-      return { error: 'Server Error! Kod(531)' };
+      return serverError(error.message, __dirname, 'addNews');
     }
   },
   updateNews: async (parent: any, { id, input }: any, context: any) => {
@@ -133,8 +132,7 @@ export default {
 
       return updatedNews;
     } catch (error) {
-      log.error(error.message, { path: __filename, object: 'updateNews' });
-      return { error: 'Server Error! Kod(532)' };
+      return serverError(error.message, __dirname, 'updateNews');
     }
   },
   deleteNews: async (parent: any, { id }: any, context: any) => {
@@ -157,8 +155,7 @@ export default {
 
       return { message: 'News Deleted!' };
     } catch (error) {
-      log.error(error.message, { path: __filename, object: 'deleteNews' });
-      return { error: 'Server Error! Kod(534)' };
+      return serverError(error.message, __dirname, 'addNews');
     }
   },
 };

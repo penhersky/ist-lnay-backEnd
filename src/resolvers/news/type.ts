@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Cathedra, Group, User, FileNews } from '../../database/models';
-import log from '../../lib/logger/logger';
+import { logError } from '../../lib/logger';
 
 export default {
   news: {
@@ -8,7 +8,7 @@ export default {
       try {
         return await User.findOne({ where: { id: parent.author } });
       } catch (error) {
-        log.error(error.message, { path: __filename, object: 'author' });
+        logError(error.message, __dirname, 'author');
         return null;
       }
     },
@@ -16,7 +16,7 @@ export default {
       try {
         return await Group.findOne({ where: { id: parent.group } });
       } catch (error) {
-        log.error(error.message, { path: __filename, object: 'group' });
+        logError(error.message, __dirname, 'group');
         return null;
       }
     },
@@ -24,7 +24,7 @@ export default {
       try {
         return await Cathedra.findOne({ where: { id: parent.cathedra } });
       } catch (error) {
-        log.error(error.message, { path: __filename, object: 'cathedra' });
+        logError(error.message, __dirname, 'cathedra');
         return null;
       }
     },
@@ -40,7 +40,7 @@ export default {
             .value(),
         );
       } catch (error) {
-        log.error(error.message, { path: __filename, object: 'images' });
+        logError(error.message, __dirname, 'images');
         return [];
       }
     },
@@ -56,7 +56,7 @@ export default {
             .value(),
         );
       } catch (error) {
-        log.error(error.message, { path: __filename, object: 'files' });
+        logError(error.message, __dirname, 'files');
         return [];
       }
     },

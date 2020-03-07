@@ -39,6 +39,7 @@
     "bunyan": "1.8.12",
     "cors": "2.8.5",
     "dotenv": "8.2.0",
+    "lodash": "4.17.15",
     "express": "4.17.1",
     "graphql": "14.5.8",
     "jsonwebtoken": "8.5.1",

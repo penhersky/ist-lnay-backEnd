@@ -1,6 +1,6 @@
 import { Group } from '../../database/models';
 import pagination from '../pagination';
-import log from '../../lib/logger/logger';
+import { serverError } from '../../lib/logger';
 
 export default {
   getGroup: async (_: any, { id }: any, context: any) => {
@@ -9,15 +9,10 @@ export default {
       if (!group) return { message: 'Group is not found!' };
       return group;
     } catch (error) {
-      log.error(error.message, { path: __filename, object: 'getGroup' });
-      return { error: 'Server Error! Kod(211)' };
+      return serverError(error.message, __dirname, 'getGroup');
     }
   },
-  getGroupsByCathedraId: async (
-    _: any,
-    { id, page, itemsPerPage }: any,
-    context: any,
-  ) => {
+  getGroupsByCathedraId: async (_: any, { id, page, itemsPerPage }: any) => {
     try {
       const allGroup = await Group.findAll({
         where: { cathedra: id },
@@ -31,11 +26,7 @@ export default {
         groups: returnPage.arr,
       };
     } catch (error) {
-      log.error(error.message, {
-        path: __filename,
-        object: 'getGroupByCathedraID',
-      });
-      return { error: 'Server Error! Kod(212)' };
+      return serverError(error.message, __dirname, 'getGroupByCathedraID');
     }
   },
   getGroups: async (_: any, { page, itemsPerPage }: any, context: any) => {
@@ -49,8 +40,7 @@ export default {
         groups: returnPage.arr,
       };
     } catch (error) {
-      log.error(error.message, { path: __filename, object: 'getGroups' });
-      return { error: 'Server Error! Kod(213)' };
+      return serverError(error.message, __dirname, 'getGroups');
     }
   },
 };

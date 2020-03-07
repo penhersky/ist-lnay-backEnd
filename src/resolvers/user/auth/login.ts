@@ -3,7 +3,7 @@ import bcryptjs from 'bcryptjs';
 import { User } from '../../../database/models';
 import { loginValidation } from './_validationAuth';
 import { SECRET } from '../../../config';
-import log from '../../../lib/logger/logger';
+import { serverError } from '../../../lib/logger';
 import _ from 'lodash';
 
 export default async (paent: any, { email, password }: any) => {
@@ -38,10 +38,6 @@ export default async (paent: any, { email, password }: any) => {
       user: _.omit(user.dataValues, ['password']),
     };
   } catch (error) {
-    log.error(error.message, {
-      path: __filename,
-      object: 'login',
-    });
-    return { error: 'Server error! Kod(003)' };
+    return serverError(error.message, __dirname, 'login');
   }
 };

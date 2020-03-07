@@ -3,7 +3,7 @@ import { passwordValidation, validationUserData } from './_validationAuth';
 //import Email from "./email";
 import { User, UserInformation } from '../../../database/models';
 import { createURL, verifyKey } from '../../../lib/email/urlForMail';
-import log from '../../../lib/logger/logger';
+import { serverError } from '../../../lib/logger';
 
 export default {
   startRegister: async (
@@ -65,11 +65,7 @@ export default {
         message: `Перейдіть на електронну пошту: ${email} та підтвердіте реєстрацію!`,
       };
     } catch (error) {
-      log.error(error.message, {
-        path: __filename,
-        object: 'startRegistration',
-      });
-      return { error: 'Server error! Kod(001)' };
+      return serverError(error.message, __dirname, 'startRegistration');
     }
   },
 
@@ -93,11 +89,7 @@ export default {
       }
       return { error: 'Термін дії ключа вийшов!' };
     } catch (error) {
-      log.error(error.message, {
-        path: __filename,
-        object: 'finishRegistration',
-      });
-      return { error: 'Server error! Kod(002)' };
+      return serverError(error.message, __dirname, 'finishRegistration');
     }
   },
 };

@@ -1,5 +1,5 @@
 import { Image } from '../../database/models';
-import log from '../../lib/logger/logger';
+import { logError } from '../../lib/logger';
 import _ from 'lodash';
 
 export default {
@@ -14,7 +14,7 @@ export default {
             .value(),
         );
       } catch (error) {
-        log.error(error.message, { path: __filename, object: 'images' });
+        logError(error.message, __dirname, 'images');
         return [];
       }
     },
